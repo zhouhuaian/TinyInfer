@@ -293,7 +293,7 @@ std::vector<sftensor> RuntimeGraph::Forward(const std::vector<sftensor>& inputs,
 
 slayer RuntimeGraph::CreateLayer(const srunop& op) {
   CHECK(op != nullptr) << "Operator is empty!";
-  const auto& layer = LayerRegisterer::CreateLayer(op);
+  const auto& layer = LayerRegister::CreateLayer(op);
   CHECK(layer != nullptr) << "Layer init failed " << op->type;
   return layer;
 }
