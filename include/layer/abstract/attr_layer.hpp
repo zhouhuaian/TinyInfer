@@ -36,8 +36,8 @@ public:
     const std::vector<sftensor>& bias() const override;
 
 protected:
-    std::vector<sftensor> weights_;  // 权重
-    std::vector<sftensor> bias_;  // 偏置
+    std::vector<sftensor> weights_; // 权重
+    std::vector<sftensor> bias_;    // 偏置
 };
 
 }  // namespace TinyInfer

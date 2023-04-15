@@ -10,7 +10,7 @@
 namespace TinyInfer {
 
 // 计算节点的权重
-struct RuntimeAttribute {
+struct RuntimeAttr {
   
   std::vector<char> weight_data;  // 权重值（以char类型存储）
   std::vector<int> shape;         // 权重维度
@@ -30,10 +30,10 @@ struct RuntimeAttribute {
   void clear();
 };
 
-using srunattr = std::shared_ptr<RuntimeAttribute>;
+using srunattr = std::shared_ptr<RuntimeAttr>;
 
 template <class T>
-std::vector<T> RuntimeAttribute::get(bool need_clear) {
+std::vector<T> RuntimeAttr::get(bool need_clear) {
   CHECK(!weight_data.empty());
   CHECK(type != RuntimeDataType::TypeUnknown);
   

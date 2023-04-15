@@ -11,7 +11,7 @@
 #include "runtime/ir.h"
 #include "runtime_attr.hpp"
 #include "runtime_operand.hpp"
-#include "runtime_parameter.hpp"
+#include "runtime_param.hpp"
 
 namespace TinyInfer {
 
@@ -34,7 +34,7 @@ struct RuntimeOperator {
     std::unordered_set<std::string> out_ops_names;      // 节点的后继（输出）节点名称
     std::unordered_map<std::string, std::shared_ptr<RuntimeOperator>> out_ops;  // 后继（输出）节点
     
-    std::unordered_map<std::string, RuntimeParameter*> params;      // 节点参数
+    std::unordered_map<std::string, RuntimeParam*> params;      // 节点参数
     std::unordered_map<std::string, srunattr> attrs;                // 节点权重
 };
 

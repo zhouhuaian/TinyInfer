@@ -151,7 +151,7 @@ TEST(test_tensor, index1) {
   for (int i = 0; i < 27; ++i) {
     values.push_back(1);
   }
-  f3.Fill(values);
+  f3.Fill(values, true);
   for (int i = 0; i < 27; ++i) {
     ASSERT_EQ(f3.index(i), 1);
   }
@@ -170,7 +170,7 @@ TEST(test_tensor, flatten1) {
   for (int i = 0; i < 27; ++i) {
     values.push_back(float(i));
   }
-  f3.Fill(values);
+  f3.Fill(values, true);
   f3.Flatten(false);
   ASSERT_EQ(f3.channels(), 1);
   ASSERT_EQ(f3.rows(), 27);
@@ -195,7 +195,7 @@ TEST(test_tensor, flatten2) {
   for (int i = 0; i < 27; ++i) {
     values.push_back(float(i));
   }
-  f3.Fill(values);
+  f3.Fill(values, true);
   f3.Flatten(true);
   for (int i = 0; i < 27; ++i) {
     ASSERT_EQ(f3.index(i), i);
@@ -209,7 +209,7 @@ TEST(test_tensor, fill1) {
   for (int i = 0; i < 27; ++i) {
     values.push_back(float(i));
   }
-  f3.Fill(values);
+  f3.Fill(values, true);
   int index = 0;
   for (int c = 0; c < 3; ++c) {
     for (int i = 0; i < f3.rows(); ++i) {
@@ -222,7 +222,7 @@ TEST(test_tensor, fill1) {
 }
 
 TEST(test_tensor, create1) {
-  const std::shared_ptr<ftensor>& tensor_ptr = TensorCreate(3, 32, 32);
+  const std::shared_ptr<ftensor>& tensor_ptr = Create(3, 32, 32);
   ASSERT_EQ(tensor_ptr->empty(), false);
   ASSERT_EQ(tensor_ptr->channels(), 3);
   ASSERT_EQ(tensor_ptr->rows(), 32);
@@ -230,7 +230,7 @@ TEST(test_tensor, create1) {
 }
 
 TEST(test_tensor, create2) {
-  const std::shared_ptr<ftensor>& tensor_ptr = TensorCreate({3, 32, 32});
+  const std::shared_ptr<ftensor>& tensor_ptr = Create({3, 32, 32});
   ASSERT_EQ(tensor_ptr->empty(), false);
   ASSERT_EQ(tensor_ptr->channels(), 3);
   ASSERT_EQ(tensor_ptr->rows(), 32);
@@ -238,10 +238,11 @@ TEST(test_tensor, create2) {
 }
 
 TEST(test_tensor, tensor_broadcast1) {
-  const std::shared_ptr<ftensor>& tensor1 = TensorCreate({3, 1, 1});
-  const std::shared_ptr<ftensor>& tensor2 = TensorCreate({3, 32, 32});
+  const std::shared_ptr<ftensor>& tensor1 = Create({3, 1, 1});
+  const std::shared_ptr<ftensor>& tensor2 = Create({3, 32, 32});
 
-  const auto& [tensor11, tensor21] = TensorBroadcast(tensor1, tensor2);
+  const auto& [tensor11, tensor21] = 
+        Broadcast(tensor1, tensor2);
   ASSERT_EQ(tensor21->channels(), 3);
   ASSERT_EQ(tensor21->rows(), 32);
   ASSERT_EQ(tensor21->cols(), 32);
@@ -255,11 +256,12 @@ TEST(test_tensor, tensor_broadcast1) {
 }
 
 TEST(test_tensor, tensor_broadcast2) {
-  const std::shared_ptr<ftensor>& tensor1 = TensorCreate({3, 32, 32});
-  const std::shared_ptr<ftensor>& tensor2 = TensorCreate({3, 1, 1});
+  const std::shared_ptr<ftensor>& tensor1 = Create({3, 32, 32});
+  const std::shared_ptr<ftensor>& tensor2 = Create({3, 1, 1});
   tensor2->Rand();
 
-  const auto& [tensor11, tensor21] = TensorBroadcast(tensor1, tensor2);
+  const auto& [tensor11, tensor21] = 
+        Broadcast(tensor1, tensor2);
   ASSERT_EQ(tensor21->channels(), 3);
   ASSERT_EQ(tensor21->rows(), 32);
   ASSERT_EQ(tensor21->cols(), 32);
@@ -295,7 +297,7 @@ TEST(test_tensor, add1) {
   f1->Fill(1.f);
   const auto& f2 = std::make_shared<ftensor>(3, 224, 224);
   f2->Fill(2.f);
-  const auto& f3 = TensorElementAdd(f2, f1);
+  const auto& f3 = ElemAdd(f2, f1);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 3.f);
   }
@@ -306,7 +308,7 @@ TEST(test_tensor, add2) {
   f1->Fill(1.f);
   const auto& f2 = std::make_shared<ftensor>(3, 1, 1);
   f2->Fill(2.f);
-  const auto& f3 = TensorElementAdd(f2, f1);
+  const auto& f3 = ElemAdd(f2, f1);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 3.f);
   }
@@ -317,7 +319,7 @@ TEST(test_tensor, add3) {
   f1->Fill(1.f);
   const auto& f2 = std::make_shared<ftensor>(3, 1, 1);
   f2->Fill(2.f);
-  const auto& f3 = TensorElementAdd(f1, f2);
+  const auto& f3 = ElemAdd(f1, f2);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 3.f);
   }
@@ -328,7 +330,7 @@ TEST(test_tensor, add4) {
   f1->Fill(1.f);
   const auto& f2 = std::make_shared<ftensor>(3, 224, 224);
   f2->Fill(2.f);
-  const auto& f3 = TensorElementAdd(f1, f2);
+  const auto& f3 = ElemAdd(f1, f2);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 3.f);
   }
@@ -339,7 +341,7 @@ TEST(test_tensor, mul1) {
   f1->Fill(3.f);
   const auto& f2 = std::make_shared<ftensor>(3, 224, 224);
   f2->Fill(2.f);
-  const auto& f3 = TensorElementMultiply(f2, f1);
+  const auto& f3 = ElemMul(f2, f1);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 6.f);
   }
@@ -350,7 +352,7 @@ TEST(test_tensor, mul2) {
   f1->Fill(3.f);
   const auto& f2 = std::make_shared<ftensor>(3, 1, 1);
   f2->Fill(2.f);
-  const auto& f3 = TensorElementMultiply(f2, f1);
+  const auto& f3 = ElemMul(f2, f1);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 6.f);
   }
@@ -361,7 +363,7 @@ TEST(test_tensor, mul3) {
   f1->Fill(3.f);
   const auto& f2 = std::make_shared<ftensor>(3, 224, 224);
   f2->Fill(2.f);
-  const auto& f3 = TensorElementMultiply(f1, f2);
+  const auto& f3 = ElemMul(f1, f2);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 6.f);
   }
@@ -372,7 +374,7 @@ TEST(test_tensor, mul4) {
   f1->Fill(3.f);
   const auto& f2 = std::make_shared<ftensor>(3, 1, 1);
   f2->Fill(2.f);
-  const auto& f3 = TensorElementMultiply(f1, f2);
+  const auto& f3 = ElemMul(f1, f2);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 6.f);
   }
@@ -385,7 +387,7 @@ TEST(test_tensor, mul5) {
   f2->Fill(2.f);
 
   const auto& f3 = std::make_shared<ftensor>(3, 224, 224);
-  TensorElementMultiply(f1, f2, f3);
+  ElemMul(f1, f2, f3);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 6.f);
   }
@@ -398,7 +400,7 @@ TEST(test_tensor, mul6) {
   f2->Fill(2.f);
 
   const auto& f3 = std::make_shared<ftensor>(3, 224, 224);
-  TensorElementMultiply(f2, f1, f3);
+  ElemMul(f2, f1, f3);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 6.f);
   }
@@ -411,7 +413,7 @@ TEST(test_tensor, add5) {
   f2->Fill(2.f);
 
   const auto& f3 = std::make_shared<ftensor>(3, 224, 224);
-  TensorElementAdd(f1, f2, f3);
+  ElemAdd(f1, f2, f3);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 5.f);
   }
@@ -424,7 +426,7 @@ TEST(test_tensor, add6) {
   f2->Fill(2.f);
 
   const auto& f3 = std::make_shared<ftensor>(3, 224, 224);
-  TensorElementAdd(f2, f1, f3);
+  ElemAdd(f2, f1, f3);
   for (int i = 0; i < f3->size(); ++i) {
     ASSERT_EQ(f3->index(i), 5.f);
   }
@@ -441,7 +443,7 @@ TEST(test_tensor, shapes) {
 TEST(test_tensor, raw_shapes1) {
   ftensor f3(2, 3, 4);
   f3.Reshape({24});
-  const auto& shapes = f3.raw_shapes();
+  const auto& shapes = f3.raw_shape();
   ASSERT_EQ(shapes.size(), 1);
   ASSERT_EQ(shapes.at(0), 24);
 }
@@ -449,7 +451,7 @@ TEST(test_tensor, raw_shapes1) {
 TEST(test_tensor, raw_shapes2) {
   ftensor f3(2, 3, 4);
   f3.Reshape({4, 6});
-  const auto& shapes = f3.raw_shapes();
+  const auto& shapes = f3.raw_shape();
   ASSERT_EQ(shapes.size(), 2);
   ASSERT_EQ(shapes.at(0), 4);
   ASSERT_EQ(shapes.at(1), 6);
@@ -458,7 +460,7 @@ TEST(test_tensor, raw_shapes2) {
 TEST(test_tensor, raw_shapes3) {
   ftensor f3(2, 3, 4);
   f3.Reshape({4, 3, 2});
-  const auto& shapes = f3.raw_shapes();
+  const auto& shapes = f3.raw_shape();
   ASSERT_EQ(shapes.size(), 3);
   ASSERT_EQ(shapes.at(0), 4);
   ASSERT_EQ(shapes.at(1), 3);
@@ -468,7 +470,7 @@ TEST(test_tensor, raw_shapes3) {
 TEST(test_tensor, raw_view1) {
   ftensor f3(2, 3, 4);
   f3.Reshape({24}, true);
-  const auto& shapes = f3.raw_shapes();
+  const auto& shapes = f3.raw_shape();
   ASSERT_EQ(shapes.size(), 1);
   ASSERT_EQ(shapes.at(0), 24);
 }
@@ -476,7 +478,7 @@ TEST(test_tensor, raw_view1) {
 TEST(test_tensor, raw_view2) {
   ftensor f3(2, 3, 4);
   f3.Reshape({4, 6}, true);
-  const auto& shapes = f3.raw_shapes();
+  const auto& shapes = f3.raw_shape();
   ASSERT_EQ(shapes.size(), 2);
   ASSERT_EQ(shapes.at(0), 4);
   ASSERT_EQ(shapes.at(1), 6);
@@ -485,7 +487,7 @@ TEST(test_tensor, raw_view2) {
 TEST(test_tensor, raw_view3) {
   ftensor f3(2, 3, 4);
   f3.Reshape({4, 3, 2}, true);
-  const auto& shapes = f3.raw_shapes();
+  const auto& shapes = f3.raw_shape();
   ASSERT_EQ(shapes.size(), 3);
   ASSERT_EQ(shapes.at(0), 4);
   ASSERT_EQ(shapes.at(1), 3);
@@ -499,7 +501,7 @@ TEST(test_tensor, padding1) {
   ASSERT_EQ(tensor.cols(), 5);
 
   tensor.Fill(1.f);
-  tensor.Padding({1, 2, 3, 4}, 0);
+  tensor.Pad({1, 2, 3, 4}, 0);
   ASSERT_EQ(tensor.rows(), 7);
   ASSERT_EQ(tensor.cols(), 12);
 
@@ -524,7 +526,7 @@ TEST(test_tensor, padding2) {
   ASSERT_EQ(tensor.cols(), 5);
 
   tensor.Fill(1.f);
-  tensor.Padding({2, 2, 2, 2}, 3.14f);
+  tensor.Pad({2, 2, 2, 2}, 3.14f);
   ASSERT_EQ(tensor.rows(), 8);
   ASSERT_EQ(tensor.cols(), 9);
 
@@ -553,7 +555,7 @@ TEST(test_tensor, review1) {
     values.push_back(float(i));
   }
 
-  tensor.Fill(values);
+  tensor.Fill(values, true);
 
   tensor.Reshape({4, 3, 5}, true);
   auto data = tensor.slice(0);
@@ -601,7 +603,7 @@ TEST(test_tensor, review2) {
   arma::fmat f2 =
       "1,2,3,4;"
       "5,6,7,8";
-  sftensor data = TensorCreate(2, 2, 4);
+  sftensor data = Create(2, 2, 4);
   data->slice(0) = f1;
   data->slice(1) = f2;
   data->Reshape({16}, true);
@@ -619,7 +621,7 @@ TEST(test_tensor, review3) {
       "1,2,3,4;"
       "5,6,7,8";
 
-  sftensor data = TensorCreate(1, 2, 4);
+  sftensor data = Create(1, 2, 4);
   data->slice(0) = f1;
   data->Reshape({4, 2}, true);
 
@@ -644,7 +646,7 @@ TEST(test_tensor, review4) {
       "9,10,11,12;"
       "13,14,15,16";
 
-  sftensor data = TensorCreate(2, 2, 4);
+  sftensor data = Create(2, 2, 4);
   data->slice(0) = f1;
   data->slice(1) = f2;
   data->Reshape({4, 2, 2}, true);
@@ -672,7 +674,7 @@ TEST(test_tensor, reshape1) {
       "1,3;"
       "2,4";
 
-  sftensor data = TensorCreate(2, 2, 2);
+  sftensor data = Create(2, 2, 2);
   data->slice(0) = f1;
   data->slice(1) = f2;
   data->Reshape({8});
@@ -694,7 +696,7 @@ TEST(test_tensor, reshape2) {
       "0,2;"
       "1,3";
 
-  sftensor data = TensorCreate(2, 2, 2);
+  sftensor data = Create(2, 2, 2);
   data->slice(0) = f1;
   data->slice(1) = f2;
   data->Reshape({2, 4});
@@ -768,7 +770,7 @@ TEST(test_tensor, is_same1) {
   std::shared_ptr<ftensor> in2 =
       std::make_shared<ftensor>(3, 32, 32);
   in2->Fill(2.f);
-  ASSERT_EQ(TensorIsSame(in1, in2), true);
+  ASSERT_EQ(IsSame(in1, in2), true);
 }
 
 TEST(test_tensor, is_same2) {
@@ -779,7 +781,7 @@ TEST(test_tensor, is_same2) {
   std::shared_ptr<ftensor> in2 =
       std::make_shared<ftensor>(3, 32, 32);
   in2->Fill(2.f);
-  ASSERT_EQ(TensorIsSame(in1, in2), false);
+  ASSERT_EQ(IsSame(in1, in2), false);
 }
 
 TEST(test_tensor, is_same3) {
@@ -790,17 +792,17 @@ TEST(test_tensor, is_same3) {
   std::shared_ptr<ftensor> in2 =
       std::make_shared<ftensor>(3, 31, 32);
   in2->Fill(1.f);
-  ASSERT_EQ(TensorIsSame(in1, in2), false);
+  ASSERT_EQ(IsSame(in1, in2), false);
 }
 
 TEST(test_tensor, tensor_padding1) {
-  sftensor tensor = TensorCreate(3, 4, 5);
+  sftensor tensor = Create(3, 4, 5);
   ASSERT_EQ(tensor->channels(), 3);
   ASSERT_EQ(tensor->rows(), 4);
   ASSERT_EQ(tensor->cols(), 5);
 
   tensor->Fill(1.f);
-  tensor = TensorPadding(tensor, {2, 2, 2, 2}, 3.14f);
+  tensor = Pad(tensor, {2, 2, 2, 2}, 3.14f);
   ASSERT_EQ(tensor->rows(), 8);
   ASSERT_EQ(tensor->cols(), 9);
 

@@ -357,56 +357,56 @@ void RuntimeGraph::InitOpParams(
     // 构造不同类型的参数
     const int type = pnnx_param.type;
     switch (type) {
-      case int(RuntimeParameterType::ParamUnknown): {
-        RuntimeParameter* param = new RuntimeParameter;
+      case int(RuntimeParamType::ParamUnknown): {
+        RuntimeParam* param = new RuntimeParam;
         op->params.insert({name, param});
         break;
       }
 
-      case int(RuntimeParameterType::ParamBool): {
-        RuntimeParameterBool* param = new RuntimeParameterBool;
+      case int(RuntimeParamType::ParamBool): {
+        RuntimeParamBool* param = new RuntimeParamBool;
         param->value = pnnx_param.b;
         op->params.insert({name, param});
         break;
       }
 
-      case int(RuntimeParameterType::ParamInt): {
-        RuntimeParameterInt* param = new RuntimeParameterInt;
+      case int(RuntimeParamType::ParamInt): {
+        RuntimeParamInt* param = new RuntimeParamInt;
         param->value = pnnx_param.i;
         op->params.insert({name, param});
         break;
       }
 
-      case int(RuntimeParameterType::ParamFloat): {
-        RuntimeParameterFloat* param = new RuntimeParameterFloat;
+      case int(RuntimeParamType::ParamFloat): {
+        RuntimeParamFloat* param = new RuntimeParamFloat;
         param->value = pnnx_param.f;
         op->params.insert({name, param});
         break;
       }
 
-      case int(RuntimeParameterType::ParamStr): {
-        RuntimeParameterString* param = new RuntimeParameterString;
+      case int(RuntimeParamType::ParamStr): {
+        RuntimeParamStr* param = new RuntimeParamStr;
         param->value = pnnx_param.s;
         op->params.insert({name, param});
         break;
       }
 
-      case int(RuntimeParameterType::ParamIntArray): {
-        RuntimeParameterIntArray* param = new RuntimeParameterIntArray;
+      case int(RuntimeParamType::ParamIntArray): {
+        RuntimeParamIntArr* param = new RuntimeParamIntArr;
         param->value = pnnx_param.ai;
         op->params.insert({name, param});
         break;
       }
 
-      case int(RuntimeParameterType::ParamFloatArray): {
-        RuntimeParameterFloatArray* param = new RuntimeParameterFloatArray;
+      case int(RuntimeParamType::ParamFloatArray): {
+        RuntimeParamFloatArr* param = new RuntimeParamFloatArr;
         param->value = pnnx_param.af;
         op->params.insert({name, param});
         break;
       }
 
-      case int(RuntimeParameterType::ParamStrArray): {
-        RuntimeParameterStringArray* param = new RuntimeParameterStringArray;
+      case int(RuntimeParamType::ParamStrArray): {
+        RuntimeParamStrArr* param = new RuntimeParamStrArr;
         param->value = pnnx_param.as;
         op->params.insert({name, param});
         break;
@@ -426,7 +426,7 @@ void RuntimeGraph::InitOpAttrs(
   for (const auto& [name, pnnx_attr] : attrs) {
     switch (pnnx_attr.type) {
       case 1: {
-        srunattr attr = std::make_shared<RuntimeAttribute>();
+        srunattr attr = std::make_shared<RuntimeAttr>();
         attr->type = RuntimeDataType::TypeFloat32;
         attr->shape = pnnx_attr.shape;
         attr->weight_data = pnnx_attr.data;

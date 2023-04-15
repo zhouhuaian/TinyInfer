@@ -53,17 +53,17 @@ public:
     virtual const std::vector<sftensor>& weights() const;
 
     /**
-     * 设置Layer的偏移量
+     * 设置Layer的偏置
      */
     virtual void set_bias(const std::vector<sftensor>& bias);
 
     /**
-     * 设置Layer的偏移量
+     * 设置Layer的偏置
      */
     virtual void set_bias(const std::vector<float>& bias);
 
     /**
-     * 返回Layer的偏移量
+     * 返回Layer的偏置
      */
     virtual const std::vector<sftensor>& bias() const;
 

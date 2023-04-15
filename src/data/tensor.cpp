@@ -9,49 +9,49 @@ Tensor<float>::Tensor(uint32_t channels, uint32_t rows, uint32_t cols) {
   
   data_ = arma::fcube(rows, cols, channels);
   if (channels == 1 && rows == 1) {  // (1,1,cols)->(cols)
-    this->raw_shapes_ = std::vector<uint32_t>{cols};
+    this->raw_shape_ = std::vector<uint32_t>{cols};
   } else if (channels == 1) {  // (1,rows,cols)->(rows,cols)
-    this->raw_shapes_ = std::vector<uint32_t>{rows, cols};
+    this->raw_shape_ = std::vector<uint32_t>{rows, cols};
   } else {  // (channels,rows,cols)
-    this->raw_shapes_ = std::vector<uint32_t>{channels, rows, cols};
+    this->raw_shape_ = std::vector<uint32_t>{channels, rows, cols};
   }
 }
 
-Tensor<float>::Tensor(const std::vector<uint32_t>& shapes) {
-  CHECK(shapes.size() == 3);
+Tensor<float>::Tensor(const std::vector<uint32_t>& shape) {
+  CHECK(shape.size() == 3);
   
-  uint32_t channels = shapes.at(0);
-  uint32_t rows = shapes.at(1);
-  uint32_t cols = shapes.at(2);
+  uint32_t channels = shape.at(0);
+  uint32_t rows = shape.at(1);
+  uint32_t cols = shape.at(2);
 
   data_ = arma::fcube(rows, cols, channels);
   if (channels == 1 && rows == 1) {
-    this->raw_shapes_ = std::vector<uint32_t>{cols};
+    this->raw_shape_ = std::vector<uint32_t>{cols};
   } else if (channels == 1) {
-    this->raw_shapes_ = std::vector<uint32_t>{rows, cols};
+    this->raw_shape_ = std::vector<uint32_t>{rows, cols};
   } else {
-    this->raw_shapes_ = std::vector<uint32_t>{channels, rows, cols};
+    this->raw_shape_ = std::vector<uint32_t>{channels, rows, cols};
   }
 }
 
 Tensor<float>::Tensor(const Tensor& tensor) {
   if (this != &tensor) {
     this->data_ = tensor.data_;
-    this->raw_shapes_ = tensor.raw_shapes_;
+    this->raw_shape_ = tensor.raw_shape_;
   }
 }
 
 Tensor<float>::Tensor(ftensor&& tensor) noexcept {
   if (this != &tensor) {
     this->data_ = std::move(tensor.data_);
-    this->raw_shapes_ = std::move(tensor.raw_shapes_);
+    this->raw_shape_ = std::move(tensor.raw_shape_);
   }
 }
 
 ftensor& Tensor<float>::operator=(const Tensor& tensor) {
   if (this != &tensor) {
     this->data_ = tensor.data_;
-    this->raw_shapes_ = tensor.raw_shapes_;
+    this->raw_shape_ = tensor.raw_shape_;
   }
   return *this;
 }
@@ -59,7 +59,7 @@ ftensor& Tensor<float>::operator=(const Tensor& tensor) {
 ftensor& Tensor<float>::operator=(ftensor&& tensor) noexcept {
   if (this != &tensor) {
     this->data_ = std::move(tensor.data_);
-    this->raw_shapes_ = std::move(tensor.raw_shapes_);
+    this->raw_shape_ = std::move(tensor.raw_shape_);
   }
   return *this;
 }
@@ -101,9 +101,9 @@ std::vector<uint32_t> Tensor<float>::shape() const {
   return {this->channels(), this->rows(), this->cols()};
 }
 
-const std::vector<uint32_t>& Tensor<float>::raw_shapes() const {
-  CHECK(!this->raw_shapes_.empty());
-  return this->raw_shapes_;
+const std::vector<uint32_t>& Tensor<float>::raw_shape() const {
+  CHECK(!this->raw_shape_.empty());
+  return this->raw_shape_;
 }
 
 float& Tensor<float>::index(uint32_t offset) {
@@ -144,7 +144,7 @@ float Tensor<float>::at(uint32_t channel, uint32_t row, uint32_t col) const {
   return this->data_.at(row, col, channel);
 }
 
-void Tensor<float>::Padding(const std::vector<uint32_t>& pads, float padding_value) {
+void Tensor<float>::Pad(const std::vector<uint32_t>& pads, float pad_value) {
   CHECK(!this->data_.empty());
   CHECK_EQ(pads.size(), 4);
   
@@ -156,7 +156,7 @@ void Tensor<float>::Padding(const std::vector<uint32_t>& pads, float padding_val
   arma::fcube new_data(this->data_.n_rows + pad_rows1 + pad_rows2,
                        this->data_.n_cols + pad_cols1 + pad_cols2,
                        this->data_.n_slices);
-  new_data.fill(padding_value);
+  new_data.fill(pad_value);
 
   new_data.subcube(pad_rows1, pad_cols1, 0, new_data.n_rows - pad_rows2 - 1,
                    new_data.n_cols - pad_cols2 - 1, new_data.n_slices - 1) =
@@ -210,13 +210,13 @@ void Tensor<float>::Show() {
   }
 }
 
-void Tensor<float>::Reshape(const std::vector<uint32_t>& shapes, bool row_major) {
+void Tensor<float>::Reshape(const std::vector<uint32_t>& shape, bool row_major) {
   CHECK(!this->data_.empty());
-  CHECK(!shapes.empty() && shapes.size() <= 3);
+  CHECK(!shape.empty() && shape.size() <= 3);
   
   const uint32_t origin_size = this->size();
   uint32_t current_size = 1;
-  for (uint32_t s : shapes) {
+  for (uint32_t s : shape) {
     current_size *= s;
   }
   CHECK_EQ(current_size, origin_size);
@@ -224,29 +224,29 @@ void Tensor<float>::Reshape(const std::vector<uint32_t>& shapes, bool row_major)
   // 以行主序重排张量中的元素
   if (row_major) {
     std::vector<uint32_t> target_shapes;  // (channel, row, col)
-    if (shapes.size() == 3) {
-      target_shapes = {shapes.at(0), shapes.at(1), shapes.at(2)};
-      this->raw_shapes_ = {shapes.at(0), shapes.at(1), shapes.at(2)};
-    } else if (shapes.size() == 2) {
-      target_shapes = {1, shapes.at(0), shapes.at(1)};
-      this->raw_shapes_ = {shapes.at(0), shapes.at(1)};
+    if (shape.size() == 3) {
+      target_shapes = {shape.at(0), shape.at(1), shape.at(2)};
+      this->raw_shape_ = {shape.at(0), shape.at(1), shape.at(2)};
+    } else if (shape.size() == 2) {
+      target_shapes = {1, shape.at(0), shape.at(1)};
+      this->raw_shape_ = {shape.at(0), shape.at(1)};
     } else {
-      target_shapes = {1, shapes.at(0), 1};
-      this->raw_shapes_ = {shapes.at(0)};
+      target_shapes = {1, shape.at(0), 1};
+      this->raw_shape_ = {shape.at(0)};
     }
     this->ReView(target_shapes);
   }
   // 以列主序重排张量中的元素
   else {
-    if (shapes.size() == 3) {
-      this->data_.reshape(shapes.at(1), shapes.at(2), shapes.at(0));
-      this->raw_shapes_ = {shapes.at(0), shapes.at(1), shapes.at(2)};
-    } else if (shapes.size() == 2) {
-      this->data_.reshape(shapes.at(0), shapes.at(1), 1);
-      this->raw_shapes_ = {shapes.at(0), shapes.at(1)};
+    if (shape.size() == 3) {
+      this->data_.reshape(shape.at(1), shape.at(2), shape.at(0));
+      this->raw_shape_ = {shape.at(0), shape.at(1), shape.at(2)};
+    } else if (shape.size() == 2) {
+      this->data_.reshape(shape.at(0), shape.at(1), 1);
+      this->raw_shape_ = {shape.at(0), shape.at(1)};
     } else {
-      this->data_.reshape(shapes.at(0), 1, 1);
-      this->raw_shapes_ = {shapes.at(0)};
+      this->data_.reshape(shape.at(0), 1, 1);
+      this->raw_shape_ = {shape.at(0)};
     }
   }
 }
@@ -294,12 +294,12 @@ const float* Tensor<float>::raw_ptr() const {
   return this->data_.memptr();
 }
 
-void Tensor<float>::ReView(const std::vector<uint32_t>& shapes) {
+void Tensor<float>::ReView(const std::vector<uint32_t>& shape) {
   CHECK(!this->data_.empty());
   
-  const uint32_t target_channels = shapes.at(0);
-  const uint32_t target_rows = shapes.at(1);
-  const uint32_t target_cols = shapes.at(2);
+  const uint32_t target_channels = shape.at(0);
+  const uint32_t target_rows = shape.at(1);
+  const uint32_t target_cols = shape.at(2);
   CHECK_EQ(this->data_.size(), target_channels * target_cols * target_rows);
   
   arma::fcube new_data(target_rows, target_cols, target_channels);
@@ -325,105 +325,103 @@ void Tensor<float>::ReView(const std::vector<uint32_t>& shapes) {
   this->data_ = std::move(new_data);
 }
 
-bool TensorIsSame(const sftensor& tensor1, const sftensor& tensor2) {
-  CHECK(tensor1 != nullptr);
-  CHECK(tensor2 != nullptr);
+bool IsSame(const sftensor& in1, const sftensor& in2) {
+  CHECK(in1 != nullptr && in2 != nullptr);
   
-  if (tensor1->shape() != tensor2->shape()) {
+  if (in1->shape() != in2->shape()) {
     return false;
   }
-  bool is_same = arma::approx_equal(tensor1->data(), tensor2->data(), "absdiff", 1e-5);
+  bool is_same = arma::approx_equal(in1->data(), in2->data(), "absdiff", 1e-5);
   return is_same;
 }
 
-sftensor TensorElementAdd(const sftensor& tensor1, const sftensor& tensor2) {
-  CHECK(tensor1 != nullptr && tensor2 != nullptr);
+sftensor ElemAdd(const sftensor& in1, const sftensor& in2) {
+  CHECK(in1 != nullptr && in2 != nullptr);
   
-  if (tensor1->shape() == tensor2->shape()) {
-    sftensor output_tensor = TensorCreate(tensor1->shape());
-    output_tensor->set_data(tensor1->data() + tensor2->data());
+  if (in1->shape() == in2->shape()) {
+    sftensor output_tensor = Create(in1->shape());
+    output_tensor->set_data(in1->data() + in2->data());
     return output_tensor;
   } else {
     // Broadcast
-    CHECK(tensor1->channels() == tensor2->channels())
+    CHECK(in1->channels() == in2->channels())
         << "Tensors shape are not adapting";
-    const auto& [input_tensor1, input_tensor2] =
-        TensorBroadcast(tensor1, tensor2);
-    CHECK(input_tensor1->shape() == input_tensor2->shape());
-    sftensor output_tensor = TensorCreate(input_tensor1->shape());
-    output_tensor->set_data(input_tensor1->data() + input_tensor2->data());
+    const auto& [input1, input2] =
+        Broadcast(in1, in2);
+    CHECK(input1->shape() == input2->shape());
+    sftensor output_tensor = Create(input1->shape());
+    output_tensor->set_data(input1->data() + input2->data());
     return output_tensor;
   }
 }
 
-void TensorElementAdd(const sftensor& tensor1, const sftensor& tensor2,
-                      const sftensor& output_tensor) {
-  output_tensor->set_data(TensorElementAdd(tensor1, tensor2)->data());
+void ElemAdd(const sftensor& in1, const sftensor& in2, const sftensor& out) {
+  out->set_data(ElemAdd(in1, in2)->data());
 }
 
-sftensor TensorElementMultiply(const sftensor& tensor1, const sftensor& tensor2) {
-  CHECK(tensor1 != nullptr && tensor2 != nullptr);
-  if (tensor1->shape() == tensor2->shape()) {
-    sftensor output_tensor = TensorCreate(tensor1->shape());
-    output_tensor->set_data(tensor1->data() % tensor2->data());
+sftensor ElemMul(const sftensor& in1, const sftensor& in2) {
+  CHECK(in1 != nullptr && in2 != nullptr);
+  
+  if (in1->shape() == in2->shape()) {
+    sftensor output_tensor = Create(in1->shape());
+    output_tensor->set_data(in1->data() % in2->data());
     return output_tensor;
   } else {
     // Broadcast
-    CHECK(tensor1->channels() == tensor2->channels())
+    CHECK(in1->channels() == in2->channels())
         << "Tensors shape are not adapting";
-    const auto& [input_tensor1, input_tensor2] =
-        TensorBroadcast(tensor1, tensor2);
-    CHECK(input_tensor1->shape() == input_tensor2->shape());
-    sftensor output_tensor = TensorCreate(input_tensor1->shape());
-    output_tensor->set_data(input_tensor1->data() % input_tensor2->data());
+    const auto& [input1, input2] =
+        Broadcast(in1, in2);
+    CHECK(input1->shape() == input2->shape());
+    sftensor output_tensor = Create(input1->shape());
+    output_tensor->set_data(input1->data() % input2->data());
     return output_tensor;
   }
 }
 
-void TensorElementMultiply(const sftensor& tensor1, const sftensor& tensor2, 
-                           const sftensor& output_tensor) {
-  output_tensor->set_data(TensorElementMultiply(tensor1, tensor2)->data());
+void ElemMul(const sftensor& in1, const sftensor& in2, const sftensor& out) {
+  out->set_data(ElemMul(in1, in2)->data());
 }
 
-sftensor TensorCreate(uint32_t channels, uint32_t rows, uint32_t cols) {
+sftensor Create(uint32_t channels, uint32_t rows, uint32_t cols) {
   CHECK(channels >= 1 && rows >= 1 && cols >= 1);
   return std::make_shared<ftensor>(channels, rows, cols);
 }
 
-sftensor TensorCreate(const std::vector<uint32_t>& shapes) {
-  CHECK(shapes.size() == 3);
-  return TensorCreate(shapes.at(0), shapes.at(1), shapes.at(2));
+sftensor Create(const std::vector<uint32_t>& shape) {
+  CHECK(shape.size() == 3);
+  return Create(shape.at(0), shape.at(1), shape.at(2));
 }
 
-std::tuple<sftensor, sftensor> TensorBroadcast(const sftensor& tensor1, const sftensor& tensor2) {
-  CHECK(tensor1 != nullptr && tensor2 != nullptr);
-  if (tensor1->shape() == tensor2->shape()) {
-    return {tensor1, tensor2};
+std::tuple<sftensor, sftensor> Broadcast(const sftensor& in1, const sftensor& in2) {
+  CHECK(in1 != nullptr && in2 != nullptr);
+  if (in1->shape() == in2->shape()) {
+    return {in1, in2};
   } else {
-    CHECK(tensor1->channels() == tensor2->channels());
-    if (tensor2->rows() == 1 && tensor2->cols() == 1) {
+    CHECK(in1->channels() == in2->channels());
+    if (in2->rows() == 1 && in2->cols() == 1) {
       sftensor new_tensor =
-          TensorCreate(tensor2->channels(), tensor1->rows(), tensor1->cols());
-      for (uint32_t c = 0; c < tensor2->channels(); ++c) {
-        new_tensor->slice(c).fill(tensor2->index(c));
+          Create(in2->channels(), in1->rows(), in1->cols());
+      for (uint32_t c = 0; c < in2->channels(); ++c) {
+        new_tensor->slice(c).fill(in2->index(c));
       }
-      return {tensor1, new_tensor};
-    } else if (tensor1->rows() == 1 && tensor1->cols() == 1) {
+      return {in1, new_tensor};
+    } else if (in1->rows() == 1 && in1->cols() == 1) {
       sftensor new_tensor =
-          TensorCreate(tensor1->channels(), tensor2->rows(), tensor2->cols());
-      for (uint32_t c = 0; c < tensor1->channels(); ++c) {
-        new_tensor->slice(c).fill(tensor1->index(c));
+          Create(in1->channels(), in2->rows(), in2->cols());
+      for (uint32_t c = 0; c < in1->channels(); ++c) {
+        new_tensor->slice(c).fill(in1->index(c));
       }
-      return {new_tensor, tensor2};
+      return {new_tensor, in2};
     } else {
       LOG(FATAL) << "Broadcast shape is not adapting!";
-      return {tensor1, tensor2};
+      return {in1, in2};
     }
   }
 }
 
-sftensor TensorPadding(const sftensor& tensor, const std::vector<uint32_t>& pads, 
-                       float padding_value) {
+sftensor Pad(const sftensor& tensor, const std::vector<uint32_t>& pads, 
+                       float pad_value) {
   CHECK(tensor != nullptr && !tensor->empty());
   CHECK(pads.size() == 4);
   
@@ -436,7 +434,7 @@ sftensor TensorPadding(const sftensor& tensor, const std::vector<uint32_t>& pads
       tensor->channels(), tensor->rows() + pad_rows1 + pad_rows2,
       tensor->cols() + pad_cols1 + pad_cols2);
 
-  if (padding_value != 0.f) output->Fill(padding_value);
+  if (pad_value != 0.f) output->Fill(pad_value);
 
   const uint32_t channels = tensor->channels();
   for (uint32_t channel = 0; channel < channels; ++channel) {

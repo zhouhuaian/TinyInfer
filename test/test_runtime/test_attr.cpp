@@ -4,7 +4,7 @@
 using namespace TinyInfer;
 
 TEST(test_runtime, attr_weight_data1) {
-  RuntimeAttribute runtime_attr;
+  RuntimeAttr runtime_attr;
   std::vector<char> weight_data;
   for (int i = 0; i < 32; ++i) {
     weight_data.push_back((char) i);
@@ -19,7 +19,7 @@ TEST(test_runtime, attr_weight_data1) {
 }
 
 TEST(test_runtime, attr_weight_data2) {
-  RuntimeAttribute runtime_attr;
+  RuntimeAttr runtime_attr;
   runtime_attr.type = RuntimeDataType::TypeFloat32;
   std::vector<char> weight_data;
   for (int i = 0; i < 32; ++i) {
@@ -36,7 +36,7 @@ TEST(test_runtime, attr_weight_data2) {
 }
 
 TEST(test_runtime, attr_shape) {
-  RuntimeAttribute runtime_attr;
+  RuntimeAttr runtime_attr;
   runtime_attr.type = RuntimeDataType::TypeFloat32;
   runtime_attr.shape = std::vector<int>{3, 32, 32};
   ASSERT_EQ(runtime_attr.shape.at(0), 3);

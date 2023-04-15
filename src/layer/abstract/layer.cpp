@@ -11,7 +11,7 @@ InferStatus Layer::Forward() {
   // 获取Layer的所有输入操作数
   const std::vector<srunoprand>& in_oprands = op->in_oprands_seq;
   
-  // ! 准备Layer的输入Tensor——将所有来源的输入Tensor保存在一个同一个vector中
+  // ! 准备Layer的输入Tensor——将所有来源的输入Tensor按顺序保存在同一个vector中
   std::vector<sftensor> in_datas;
   for (const auto& in_oprand : in_oprands) {
     for (const auto& input_data : in_oprand->data) {

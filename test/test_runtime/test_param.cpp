@@ -1,16 +1,16 @@
 #include <gtest/gtest.h>
-#include "runtime/runtime_parameter.hpp"
+#include "runtime/runtime_param.hpp"
 
 using namespace TinyInfer;
 
 TEST(test_runtime, runtime_param1) {
-  RuntimeParameter* param = new RuntimeParameterInt;
-  ASSERT_EQ(param->type, RuntimeParameterType::ParamInt);
+  RuntimeParam* param = new RuntimeParamInt;
+  ASSERT_EQ(param->type, RuntimeParamType::ParamInt);
 }
 
 TEST(test_runtime, runtime_param2) {
-  RuntimeParameter* param = new RuntimeParameterInt;
-  ASSERT_EQ(param->type, RuntimeParameterType::ParamInt);
-  ASSERT_EQ(dynamic_cast<RuntimeParameterFloat*>(param), nullptr);
-  ASSERT_NE(dynamic_cast<RuntimeParameterInt*>(param), nullptr);
+  RuntimeParam* param = new RuntimeParamInt;
+  ASSERT_EQ(param->type, RuntimeParamType::ParamInt);
+  ASSERT_EQ(dynamic_cast<RuntimeParamFloat*>(param), nullptr);
+  ASSERT_NE(dynamic_cast<RuntimeParamInt*>(param), nullptr);
 }

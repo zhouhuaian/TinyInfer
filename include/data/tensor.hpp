@@ -30,9 +30,9 @@ public:
 
     /**
      * 创建张量
-     * @param shapes 维度
+     * @param shape 维度
      */
-    explicit Tensor(const std::vector<uint32_t>& shapes);
+    explicit Tensor(const std::vector<uint32_t>& shape);
 
     Tensor(const Tensor& tensor);
 
@@ -83,7 +83,7 @@ public:
      * 返回张量的实际维度
      * @return 实际维度
      */
-    const std::vector<uint32_t>& raw_shapes() const;
+    const std::vector<uint32_t>& raw_shape() const;
 
     /**
      * 访问张量中offset处的元素
@@ -138,9 +138,9 @@ public:
     /**
      * 扩充张量维度
      * @param pads 扩充参数
-     * @param padding_value 扩充值
+     * @param pad_value 扩充值
      */
-    void Padding(const std::vector<uint32_t>& pads, float padding_value);
+    void Pad(const std::vector<uint32_t>& pads, float pad_value);
 
     /**
      * 填充张量元素值
@@ -153,7 +153,7 @@ public:
      * @param values 填充值
      * @param row_major 是否依据行主序填充
      */
-    void Fill(const std::vector<float>& values, bool row_major = true);
+    void Fill(const std::vector<float>& values, bool row_major = false);
 
     /**
      * 以常量1初始化张量
@@ -172,10 +172,10 @@ public:
 
     /**
      * 重排张量元素
-     * @param shapes 目标张量的实际维度
+     * @param shape 目标张量的实际维度
      * @param row_major 是否依据行主序进行重排
      */
-    void Reshape(const std::vector<uint32_t>& shapes, bool row_major = false);
+    void Reshape(const std::vector<uint32_t>& shape, bool row_major = false);
 
     /**
      * 展平张量
@@ -187,7 +187,7 @@ public:
      * 返回张量内所有元素
      * @param row_major 是否以行主序返回
      */
-    std::vector<float> values(bool row_major = true);
+    std::vector<float> values(bool row_major = false);
 
     /**
      * 对张量元素进行转换
@@ -208,11 +208,11 @@ public:
 private:
     /**
      * 以行主序重排张量元素
-     * @param shapes 目标张量维度
+     * @param shape 目标张量维度
      */
-    void ReView(const std::vector<uint32_t>& shapes);
+    void ReView(const std::vector<uint32_t>& shape);
     
-    std::vector<uint32_t> raw_shapes_;  // 张量的实际维度
+    std::vector<uint32_t> raw_shape_;  // 张量的实际维度
     arma::fcube data_;                  // 张量数据
 };
 
@@ -221,40 +221,40 @@ using sftensor = std::shared_ptr<Tensor<float>>;
 
 /**
  * 比较张量是否相同
- * @param tensor1 输入张量1
- * @param tensor2 输入张量2
+ * @param in1 输入张量1
+ * @param in2 输入张量2
  */
-bool TensorIsSame(const sftensor& tensor1, const sftensor& tensor2);
+bool IsSame(const sftensor& in1, const sftensor& in2);
 
 /**
  * 张量相加
- * @param tensor1 输入张量1
- * @param tensor2 输入张量2
+ * @param in1 输入张量1
+ * @param in2 输入张量2
  */
-sftensor TensorElementAdd(const sftensor& tensor1, const sftensor& tensor2);
+sftensor ElemAdd(const sftensor& in1, const sftensor& in2);
 
 /**
  * 张量相加
- * @param tensor1 输入张量1
- * @param tensor2 输入张量2
+ * @param in1 输入张量1
+ * @param in2 输入张量2
  */
-void TensorElementAdd(const sftensor& tensor1, const sftensor& tensor2, 
+void ElemAdd(const sftensor& in1, const sftensor& in2, 
                       const sftensor& output_tensor);
 
 /**
  * 张量element-wise相乘
- * @param tensor1 输入张量1
- * @param tensor2 输入张量2
+ * @param in1 输入张量1
+ * @param in2 输入张量2
  */
-sftensor TensorElementMultiply(const sftensor& tensor1, const sftensor& tensor2);
+sftensor ElemMul(const sftensor& in1, const sftensor& in2);
 
 /**
  * 张量Element-wise相乘
- * @param tensor1 输入张量1
- * @param tensor2 输入张量2
+ * @param in1 输入张量1
+ * @param in2 输入张量2
+ * @param out 输出张量
  */
-void TensorElementMultiply(const sftensor& tensor1, const sftensor& tensor2,
-                           const sftensor& output_tensor);
+void ElemMul(const sftensor& in1, const sftensor& in2, const sftensor& out);
 
 /**
  * 创建张量
@@ -262,31 +262,31 @@ void TensorElementMultiply(const sftensor& tensor1, const sftensor& tensor2,
  * @param rows 行数
  * @param cols 列数
  */
-sftensor TensorCreate(uint32_t channels, uint32_t rows, uint32_t cols);
+sftensor Create(uint32_t channels, uint32_t rows, uint32_t cols);
 
 /**
  * 创建张量
- * @param shapes 张量维度
+ * @param shape 张量维度
  */
-sftensor TensorCreate(const std::vector<uint32_t>& shapes);
+sftensor Create(const std::vector<uint32_t>& shape);
 
 /**
  * 以广播方式扩充张量维度
- * @param tensor1 张量1
- * @param tensor2 张量2
+ * @param in1 张量1
+ * @param in2 张量2
  * @return 维度相同的两个张量
  */
-std::tuple<sftensor, sftensor> TensorBroadcast(const sftensor& tensor1, const sftensor& tensor2);
+std::tuple<sftensor, sftensor> Broadcast(const sftensor& in1, const sftensor& in2);
 
 /**
  * 扩充张量维度
  * @param tensor 原张量
- * @param pads 扩充参数
- * @param padding_value 扩充值
+ * @param pads 扩充参数{up,bottom,left,right}
+ * @param pad_value 扩充值
  * @return 扩充维度的新张量
  */
-sftensor TensorPadding(const sftensor& tensor, const std::vector<uint32_t>& pads, 
-                       float padding_value);
+sftensor Pad(const sftensor& tensor, const std::vector<uint32_t>& pads, 
+                       float pad_value);
 
 }  // namespace TinyInfer
 
