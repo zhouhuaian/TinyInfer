@@ -26,12 +26,10 @@ struct RuntimeOperator {
     std::shared_ptr<Layer> layer;           // 节点对应的计算Layer
     int32_t meet_num = 0;                   // 当前节点被前驱节点访问的次数
 
-
     std::vector<srunoprand> in_oprands_seq;                     // 节点的输入操作数（一个节点可能有多个来源的输入）
     std::unordered_map<std::string, srunoprand> in_oprands;     // 节点的输入操作数（名称和操作数的映射）
 
-    srunoprand out_oprands;                             // 节点的输出操作数（一个节点最多有一个输出）
-    std::unordered_set<std::string> out_ops_names;      // 节点的后继（输出）节点名称
+    srunoprand out_oprands;                     // 节点的输出操作数（一个节点最多有一个输出）
     std::unordered_map<std::string, std::shared_ptr<RuntimeOperator>> out_ops;  // 后继（输出）节点
     
     std::unordered_map<std::string, RuntimeParam*> params;      // 节点参数

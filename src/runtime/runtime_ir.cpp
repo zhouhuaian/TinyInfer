@@ -1,6 +1,8 @@
+#include <algorithm>
 #include <deque>
 #include <iostream>
 #include <memory>
+#include <string>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -118,15 +120,15 @@ void RuntimeGraph::Build(const std::string& input_name,
 
   // 遍历每个计算节点，保存其后继节点
   for (const auto& cur_op : this->ops_) {
-    // 获取当前节点的后继节点名称
-    const std::unordered_set<std::string>& out_names = cur_op->out_ops_names;
+    // 获取当前节点的后继节点（仅有名称）
+    auto& out_ops = cur_op->out_ops;
     for (const auto& next_op : this->ops_) {
       if (next_op == cur_op) {
         continue;
       }
-      // 保存根据名称找到的后继节点
-      if (out_names.find(next_op->name) != out_names.end()) {
-        cur_op->out_ops.insert({next_op->name, next_op});
+      // 根据名称找到后继节点并保存
+      if (out_ops.find(next_op->name) != out_ops.end()) {
+        out_ops.at(next_op->name) = next_op;
       }
     }
   }
@@ -234,7 +236,7 @@ std::vector<sftensor> RuntimeGraph::Forward(const std::vector<sftensor>& inputs,
           << cur_op->layer->layer_name()
           << " layer forward failed, error code: " << int(status);
       
-      // ? 统计当前节点累计执行时间——节点不是只会执行一次吗？为什么统计累计时间？
+      // 统计相同类型算子累计执行时间
       if (debug) {
         const double dura =
             std::chrono::duration_cast<std::chrono::duration<double>>(
@@ -343,8 +345,8 @@ void RuntimeGraph::InitOpOutputs(
     // 获取输出操作数的消费（后继）节点
     const auto& consumers = output->consumers;
     // 保存当前节点的后继节点名称
-    for (const auto& c : consumers) {
-      op->out_ops_names.insert(c->name);
+    for (const auto& consumer : consumers) {
+      op->out_ops.insert({consumer->name, nullptr});
     }
   }
 }
