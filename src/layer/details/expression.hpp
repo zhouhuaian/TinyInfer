@@ -10,14 +10,15 @@ class Expression : public NoAttrLayer {
 public:
   explicit Expression(std::string statement);
 
-  InferStatus Forward(const std::vector<sftensor>& inputs, std::vector<sftensor>& outputs) override;
+  InferStatus Forward(const std::vector<sftensor> &inputs,
+                      std::vector<sftensor> &outputs) override;
 
-  static ParseParamAttrStatus GetInstance(const srunop& op, slayer& expression);
+  static ParseParamAttrStatus GetInstance(const srunop &op, slayer &expression);
 
 private:
-  std::unique_ptr<ExprParser> parser_;  // 表达式解析器
+  std::unique_ptr<ExprParser> parser_; // 表达式解析器
 };
 
-}  // namespace TinyInfer
+} // namespace TinyInfer
 
-#endif  // TINY_INFER_SOURCE_LAYER_EXPRESSION_HPP_
+#endif // TINY_INFER_SOURCE_LAYER_EXPRESSION_HPP_

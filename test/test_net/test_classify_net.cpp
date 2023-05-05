@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
-#include <glog/logging.h>
-#include "runtime/runtime_ir.hpp"
 #include "data/load_data.hpp"
+#include "runtime/runtime_ir.hpp"
+#include <glog/logging.h>
+#include <gtest/gtest.h>
 
 using namespace TinyInfer;
 
@@ -21,8 +21,8 @@ TEST(test_net, forward_resnet18) {
     std::vector<sftensor> outputs = graph.Forward(inputs, false);
     ASSERT_EQ(outputs.size(), 1);
 
-    const auto& output1 = outputs.front()->slice(0);
-    const auto& output2 = CSVDataLoader::LoadData("../../tmp/resnet/1.csv");
+    const auto &output1 = outputs.front()->slice(0);
+    const auto &output2 = CSVDataLoader::LoadData("../../tmp/resnet/1.csv");
     ASSERT_EQ(output1.size(), output2.size());
     for (uint32_t i = 0; i < output1.size(); ++i) {
       ASSERT_LE(std::abs(output1.at(i) - output2.at(i)), 5e-6);
@@ -44,8 +44,8 @@ TEST(test_net, forward_group_conv) {
   std::vector<sftensor> outputs = graph.Forward(inputs, false);
   ASSERT_EQ(outputs.size(), 1);
 
-  const auto& output1 = outputs.front()->slice(0);
-  const auto& output2 = CSVDataLoader::LoadData("../../tmp/mobilenet/1.csv");
+  const auto &output1 = outputs.front()->slice(0);
+  const auto &output2 = CSVDataLoader::LoadData("../../tmp/mobilenet/1.csv");
   ASSERT_EQ(output1.size(), output2.size());
   for (uint32_t i = 0; i < output1.size(); ++i) {
     ASSERT_LE(std::abs(output1.at(i) - output2.at(i)), 5e-6);
@@ -67,8 +67,8 @@ TEST(test_net, forward_mobilenet1) {
     std::vector<sftensor> outputs = graph.Forward(inputs, false);
     ASSERT_EQ(outputs.size(), 1);
 
-    const auto& output1 = outputs.front()->data();
-    const auto& output2 = CSVDataLoader::LoadData("../../tmp/mobilenet/2.csv");
+    const auto &output1 = outputs.front()->data();
+    const auto &output2 = CSVDataLoader::LoadData("../../tmp/mobilenet/2.csv");
     ASSERT_EQ(output1.size(), output2.size());
     for (uint32_t i = 0; i < output1.size(); ++i) {
       ASSERT_LE(std::abs(output1.at(i) - output2.at(i)), 5e-6);
@@ -92,8 +92,8 @@ TEST(test_net, forward_mobilenet2) {
     std::vector<sftensor> outputs = graph.Forward(inputs, false);
     ASSERT_EQ(outputs.size(), 1);
 
-    const auto& output1 = outputs.front()->data();
-    const auto& output2 = CSVDataLoader::LoadData("../../tmp/mobilenet/3.csv");
+    const auto &output1 = outputs.front()->data();
+    const auto &output2 = CSVDataLoader::LoadData("../../tmp/mobilenet/3.csv");
     ASSERT_EQ(output1.size(), output2.size());
     for (uint32_t i = 0; i < output1.size(); ++i) {
       ASSERT_LE(std::abs(output1.at(i) - output2.at(i)), 5e-6);

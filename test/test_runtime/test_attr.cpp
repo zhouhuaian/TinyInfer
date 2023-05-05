@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
 #include "runtime/runtime_attr.hpp"
+#include <gtest/gtest.h>
 
 using namespace TinyInfer;
 
@@ -7,14 +7,14 @@ TEST(test_runtime, attr_weight_data1) {
   RuntimeAttr runtime_attr;
   std::vector<char> weight_data;
   for (int i = 0; i < 32; ++i) {
-    weight_data.push_back((char) i);
+    weight_data.push_back((char)i);
   }
   runtime_attr.weight_data = weight_data;
-  const auto& result_weight_data = runtime_attr.weight_data;
+  const auto &result_weight_data = runtime_attr.weight_data;
   ASSERT_EQ(result_weight_data.size(), 32);
 
   for (int i = 0; i < 32; ++i) {
-    ASSERT_EQ(weight_data.at(i), (char) i);
+    ASSERT_EQ(weight_data.at(i), (char)i);
   }
 }
 
@@ -27,7 +27,7 @@ TEST(test_runtime, attr_weight_data2) {
   }
   runtime_attr.weight_data = weight_data;
 
-  const auto& result_weight_data = runtime_attr.get<float>();
+  const auto &result_weight_data = runtime_attr.get<float>();
   ASSERT_EQ(result_weight_data.size(), 8);
 
   for (int i = 0; i < 32; ++i) {

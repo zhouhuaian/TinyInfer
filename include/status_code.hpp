@@ -48,6 +48,6 @@ enum class ParseParamAttrStatus {
   AttrMissingOutFeatures = 16,
 };
 
-}  // namespace TinyInfer
+} // namespace TinyInfer
 
-#endif  // TINY_INFER_INCLUDE_COMMON_HPP_
+#endif // TINY_INFER_INCLUDE_COMMON_HPP_

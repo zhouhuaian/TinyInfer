@@ -1,25 +1,26 @@
 #ifndef TINY_INFER_INCLUDE_PARSER_RUNTIME_PARAM_HPP_
 #define TINY_INFER_INCLUDE_PARSER_RUNTIME_PARAM_HPP_
 
+#include "status_code.hpp"
 #include <string>
 #include <vector>
-#include "status_code.hpp"
 
 namespace TinyInfer {
 
 // 计算节点的参数
 struct RuntimeParam {
-  explicit RuntimeParam(RuntimeParamType type = RuntimeParamType::ParamUnknown) : type(type) {}
+  explicit RuntimeParam(RuntimeParamType type = RuntimeParamType::ParamUnknown)
+      : type(type) {}
 
   virtual ~RuntimeParam() = default;
 
-  RuntimeParamType type;  // 参数值类型
+  RuntimeParamType type; // 参数值类型
 };
 
 // int类型参数
 struct RuntimeParamInt : public RuntimeParam {
   RuntimeParamInt() : RuntimeParam(RuntimeParamType::ParamInt) {}
-  
+
   int value = 0;
 };
 
@@ -65,6 +66,6 @@ struct RuntimeParamBool : public RuntimeParam {
   bool value = false;
 };
 
-}  // namespace TinyInfer
+} // namespace TinyInfer
 
-#endif  // TINY_INFER_INCLUDE_PARSER_RUNTIME_PARAM_HPP_
+#endif // TINY_INFER_INCLUDE_PARSER_RUNTIME_PARAM_HPP_

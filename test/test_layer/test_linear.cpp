@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
-#include <glog/logging.h>
-#include "data/tensor.hpp"
 #include "../../src/layer/details/linear.hpp"
+#include "data/tensor.hpp"
+#include <glog/logging.h>
+#include <gtest/gtest.h>
 
 using namespace TinyInfer;
 
@@ -27,7 +27,7 @@ TEST(test_layer, forward_linear1) {
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
   for (int i = 0; i < outputs.size(); ++i) {
-    const auto& output_tensor = outputs.at(i);
+    const auto &output_tensor = outputs.at(i);
     for (int j = 0; j < output_tensor->size(); ++j) {
       ASSERT_EQ(output_tensor->index(j), in_features);
     }
@@ -56,7 +56,7 @@ TEST(test_layer, forward_linear2) {
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
   for (int i = 0; i < outputs.size(); ++i) {
-    const auto& output_tensor = outputs.at(i);
+    const auto &output_tensor = outputs.at(i);
     for (int j = 0; j < output_tensor->size(); ++j) {
       ASSERT_EQ(output_tensor->index(j), in_features * 2.f);
     }
@@ -67,7 +67,7 @@ TEST(test_layer, forward_linear3) {
   const uint32_t in_features = 8;
   const uint32_t out_features = 12;
   const uint32_t in_dims = 4;
-  
+
   Linear linear(in_features, out_features, false);
 
   std::vector<float> weights_raw;
@@ -92,7 +92,7 @@ TEST(test_layer, forward_linear3) {
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
   for (int i = 0; i < outputs.size(); ++i) {
-    const auto& output_tensor = outputs.at(i);
+    const auto &output_tensor = outputs.at(i);
     for (int j = 0; j < output_tensor->size(); ++j) {
       ASSERT_EQ(output_tensor->index(j), 36.f);
     }
@@ -103,7 +103,7 @@ TEST(test_layer, forward_linear4) {
   const uint32_t in_features = 64;
   const uint32_t out_features = 128;
   const uint32_t in_dims = 4;
-  
+
   Linear linear(in_features, out_features, false);
 
   std::vector<float> weights_raw;
@@ -128,7 +128,7 @@ TEST(test_layer, forward_linear4) {
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
   for (int i = 0; i < outputs.size(); ++i) {
-    const auto& output_tensor = outputs.at(i);
+    const auto &output_tensor = outputs.at(i);
     for (int j = 0; j < output_tensor->size(); ++j) {
       ASSERT_EQ(output_tensor->index(j), 2080.f);
     }
@@ -139,7 +139,7 @@ TEST(test_layer, forward_linear5) {
   const uint32_t in_features = 64;
   const uint32_t out_features = 128;
   const uint32_t in_dims = 4;
-  
+
   Linear linear(in_features, out_features, false);
 
   std::vector<float> weights_raw;
@@ -164,7 +164,7 @@ TEST(test_layer, forward_linear5) {
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
   for (int i = 0; i < outputs.size(); ++i) {
-    const auto& output_tensor = outputs.at(i);
+    const auto &output_tensor = outputs.at(i);
     for (int j = 0; j < output_tensor->size(); ++j) {
       ASSERT_EQ(output_tensor->index(j), 2080 * 2.f);
     }
@@ -175,7 +175,7 @@ TEST(test_layer, forward_linear6) {
   const uint32_t in_features = 2;
   const uint32_t out_features = 4;
   const uint32_t in_dims = 3;
-  
+
   Linear linear(in_features, out_features, false);
 
   std::vector<float> weights_raw;
@@ -188,8 +188,7 @@ TEST(test_layer, forward_linear6) {
   linear.set_weights(weights_raw);
 
   sftensor input = std::make_shared<ftensor>(1, in_features, in_dims);
-  input->Fill({1, 2, 3,
-               4, 5, 6}, true);
+  input->Fill({1, 2, 3, 4, 5, 6}, true);
   std::vector<sftensor> inputs;
   inputs.push_back(input);
 
@@ -200,7 +199,7 @@ TEST(test_layer, forward_linear6) {
   const auto status = linear.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
-  const auto& result = outputs.front();
+  const auto &result = outputs.front();
   for (int i = 0; i < out_features; ++i) {
     ASSERT_EQ(result->at(0, i, 0), 9.f);
     ASSERT_EQ(result->at(0, i, 1), 12.f);
@@ -212,7 +211,7 @@ TEST(test_layer, forward_linear7) {
   const uint32_t in_features = 3;
   const uint32_t out_features = 4;
   const uint32_t in_dims = 3;
-  
+
   Linear linear(in_features, out_features, false);
 
   std::vector<float> weights_raw;
@@ -225,9 +224,7 @@ TEST(test_layer, forward_linear7) {
   linear.set_weights(weights_raw);
 
   sftensor input = std::make_shared<ftensor>(1, in_features, in_dims);
-  input->Fill({1, 2, 3,
-               4, 5, 6,
-               7, 8, 9}, true);
+  input->Fill({1, 2, 3, 4, 5, 6, 7, 8, 9}, true);
   std::vector<sftensor> inputs;
   inputs.push_back(input);
 
@@ -238,7 +235,7 @@ TEST(test_layer, forward_linear7) {
   const auto status = linear.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
-  const auto& result = outputs.front();
+  const auto &result = outputs.front();
   for (int i = 0; i < out_features; ++i) {
     ASSERT_EQ(result->at(0, i, 0), 30.f);
     ASSERT_EQ(result->at(0, i, 1), 36.f);
@@ -250,7 +247,7 @@ TEST(test_layer, forward_linear8) {
   const uint32_t in_features = 3;
   const uint32_t out_features = 5;
   const uint32_t in_dims = 4;
-  
+
   Linear linear(in_features, out_features, false);
 
   std::vector<float> weights_raw;
@@ -263,9 +260,7 @@ TEST(test_layer, forward_linear8) {
   linear.set_weights(weights_raw);
 
   sftensor input = std::make_shared<ftensor>(1, in_features, in_dims);
-  input->Fill({1, 2, 3, 13,
-               4, 5, 6, 15,
-               7, 8, 9, 16}, true);
+  input->Fill({1, 2, 3, 13, 4, 5, 6, 15, 7, 8, 9, 16}, true);
   std::vector<sftensor> inputs;
   inputs.push_back(input);
 
@@ -276,7 +271,7 @@ TEST(test_layer, forward_linear8) {
   const auto status = linear.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
-  const auto& result = outputs.front();
+  const auto &result = outputs.front();
   for (int i = 0; i < out_features; ++i) {
     ASSERT_EQ(result->at(0, i, 0), 30.f);
     ASSERT_EQ(result->at(0, i, 1), 36.f);
@@ -297,7 +292,7 @@ TEST(test_layer, forward_linear9) {
   for (int i = 0; i < out_features; ++i) {
     for (int j = 0; j < in_features; ++j) {
       weights_raw.push_back(1.f);
-    }  
+    }
   }
   linear.set_weights(weights_raw);
 
@@ -313,7 +308,7 @@ TEST(test_layer, forward_linear9) {
   const auto status = linear.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
-  const auto& result = outputs.front();
+  const auto &result = outputs.front();
   for (int i = 0; i < out_features; ++i) {
     ASSERT_EQ(result->at(0, i, 0), 32.f);
     ASSERT_EQ(result->at(0, i, 1), 32.f);
@@ -334,7 +329,7 @@ TEST(test_layer, forward_linear10) {
   for (int i = 0; i < out_features; ++i) {
     for (int j = 0; j < in_features; ++j) {
       weights_raw.push_back(1.f);
-    }  
+    }
   }
   linear.set_weights(weights_raw);
 
@@ -350,7 +345,7 @@ TEST(test_layer, forward_linear10) {
   const auto status = linear.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
-  const auto& result = outputs.front();
+  const auto &result = outputs.front();
   for (int i = 0; i < out_features; ++i) {
     ASSERT_EQ(result->at(0, i, 0), 32.f);
     ASSERT_EQ(result->at(0, i, 1), 32.f);
@@ -381,7 +376,7 @@ TEST(test_layer, forward_linear11) {
     for (int j = 0; j < in_dims; ++j) {
       input_raw.push_back(val);
       val += 1;
-    }  
+    }
   }
   sftensor input = std::make_shared<ftensor>(1, in_features, in_dims);
   input->Fill(input_raw, true);
@@ -395,7 +390,7 @@ TEST(test_layer, forward_linear11) {
   const auto status = linear.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
-  const auto& result = outputs.front();
+  const auto &result = outputs.front();
   for (int i = 0; i < out_features; ++i) {
     ASSERT_EQ(result->at(0, i, 0), 2016.f);
     ASSERT_EQ(result->at(0, i, 1), 2048.f);
@@ -440,7 +435,7 @@ TEST(test_layer, forward_linear12) {
   const auto status = linear.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
-  const auto& result = outputs.front();
+  const auto &result = outputs.front();
   for (int i = 0; i < out_features; ++i) {
     ASSERT_EQ(result->at(0, i, 0), 2512.f);
     ASSERT_EQ(result->at(0, i, 1), 2544.f);
@@ -449,6 +444,3 @@ TEST(test_layer, forward_linear12) {
     ASSERT_EQ(result->at(0, i, 4), 2640.f);
   }
 }
-
-
-

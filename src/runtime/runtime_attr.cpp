@@ -9,4 +9,4 @@ void RuntimeAttr::clear() {
   }
 }
 
-}  // namespace TinyInfer
+} // namespace TinyInfer

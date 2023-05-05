@@ -3,7 +3,6 @@ find_package(benchmark REQUIRED)
 aux_source_directory(../bench DIR_BENCH)
 
 add_executable(bench_tiny ${DIR_BENCH})
-# # target_link_directories(bench_tiny PUBLIC ${PROJECT_SOURCE_DIR}/lib)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")

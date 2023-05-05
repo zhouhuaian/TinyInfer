@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
-#include <glog/logging.h>
-#include "data/tensor.hpp"
 #include "../../src/layer/details/flatten.hpp"
+#include "data/tensor.hpp"
+#include <glog/logging.h>
+#include <gtest/gtest.h>
 
 using namespace TinyInfer;
 
@@ -18,14 +18,14 @@ TEST(test_layer, forward_flatten_layer1) {
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
 
-  const auto& shapes = outputs.front()->shape();
+  const auto &shapes = outputs.front()->shape();
   ASSERT_EQ(shapes.size(), 3);
 
   ASSERT_EQ(shapes.at(0), 1);
   ASSERT_EQ(shapes.at(1), 8 * 24 * 32);
   ASSERT_EQ(shapes.at(2), 1);
 
-  const auto& raw_shapes = outputs.front()->raw_shape();
+  const auto &raw_shapes = outputs.front()->raw_shape();
   ASSERT_EQ(raw_shapes.size(), 1);
   ASSERT_EQ(raw_shapes.front(), 8 * 24 * 32);
 
@@ -47,14 +47,14 @@ TEST(test_layer, forward_flatten_layer2) {
   ASSERT_EQ(status, InferStatus::InferSuccess);
   ASSERT_EQ(outputs.size(), 1);
 
-  const auto& shapes = outputs.front()->shape();
+  const auto &shapes = outputs.front()->shape();
   ASSERT_EQ(shapes.size(), 3);
 
   ASSERT_EQ(shapes.at(0), 1);
   ASSERT_EQ(shapes.at(1), 8 * 24 * 32);
   ASSERT_EQ(shapes.at(2), 1);
 
-  const auto& raw_shapes = outputs.front()->raw_shape();
+  const auto &raw_shapes = outputs.front()->raw_shape();
   ASSERT_EQ(raw_shapes.size(), 1);
 
   ASSERT_EQ(raw_shapes.front(), 8 * 24 * 32);
@@ -74,17 +74,18 @@ TEST(test_layer, forward_flatten_layer3) {
 
   Flatten flatten(1, 2);
   const auto status = flatten.Forward(inputs, outputs);
-  ASSERT_EQ(status, InferStatus::InferSuccess);;
+  ASSERT_EQ(status, InferStatus::InferSuccess);
+  ;
   ASSERT_EQ(outputs.size(), 1);
 
-  const auto& shapes = outputs.front()->shape();
+  const auto &shapes = outputs.front()->shape();
   ASSERT_EQ(shapes.size(), 3);
 
   ASSERT_EQ(shapes.at(0), 1);
   ASSERT_EQ(shapes.at(1), 8 * 24);
   ASSERT_EQ(shapes.at(2), 32);
 
-  const auto& raw_shapes = outputs.front()->raw_shape();
+  const auto &raw_shapes = outputs.front()->raw_shape();
   ASSERT_EQ(raw_shapes.size(), 2);
 
   ASSERT_EQ(raw_shapes.at(0), 8 * 24);
@@ -93,7 +94,6 @@ TEST(test_layer, forward_flatten_layer3) {
   uint32_t batch1 = inputs.front()->size();
   uint32_t batch2 = outputs.front()->size();
   ASSERT_EQ(batch1, batch2);
-
 }
 
 TEST(test_layer, forward_flatten_layer4) {
@@ -110,14 +110,14 @@ TEST(test_layer, forward_flatten_layer4) {
 
   ASSERT_EQ(outputs.size(), 1);
 
-  const auto& shapes = outputs.front()->shape();
+  const auto &shapes = outputs.front()->shape();
   ASSERT_EQ(shapes.size(), 3);
 
   ASSERT_EQ(shapes.at(0), 1);
   ASSERT_EQ(shapes.at(1), 8 * 24);
   ASSERT_EQ(shapes.at(2), 32);
 
-  const auto& raw_shapes = outputs.front()->raw_shape();
+  const auto &raw_shapes = outputs.front()->raw_shape();
   ASSERT_EQ(raw_shapes.size(), 2);
 
   ASSERT_EQ(raw_shapes.at(0), 8 * 24);
@@ -142,14 +142,14 @@ TEST(test_layer, forward_flatten_layer5) {
 
   ASSERT_EQ(outputs.size(), 1);
 
-  const auto& shapes = outputs.front()->shape();
+  const auto &shapes = outputs.front()->shape();
   ASSERT_EQ(shapes.size(), 3);
 
   ASSERT_EQ(shapes.at(0), 1);
   ASSERT_EQ(shapes.at(1), 8);
   ASSERT_EQ(shapes.at(2), 24 * 32);
 
-  const auto& raw_shapes = outputs.front()->raw_shape();
+  const auto &raw_shapes = outputs.front()->raw_shape();
   ASSERT_EQ(raw_shapes.size(), 2);
 
   ASSERT_EQ(raw_shapes.at(0), 8);

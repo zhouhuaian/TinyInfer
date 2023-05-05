@@ -7,13 +7,15 @@ namespace TinyInfer {
 
 class HardSigmoid : public NoAttrLayer {
 public:
-    explicit HardSigmoid();
+  explicit HardSigmoid();
 
-    InferStatus Forward(const std::vector<sftensor>& inputs, std::vector<sftensor>& outputs) override;
+  InferStatus Forward(const std::vector<sftensor> &inputs,
+                      std::vector<sftensor> &outputs) override;
 
-    static ParseParamAttrStatus GetInstance(const srunop& op, slayer& hardsigmoid);
+  static ParseParamAttrStatus GetInstance(const srunop &op,
+                                          slayer &hardsigmoid);
 };
 
-}  // namespace TinyInfer
+} // namespace TinyInfer
 
-#endif  // TINY_INFER_SOURCE_LAYER_HARDSIGMOID_HPP_
+#endif // TINY_INFER_SOURCE_LAYER_HARDSIGMOID_HPP_

@@ -1,13 +1,14 @@
-#include <glog/logging.h>
 #include "hardsigmoid.hpp"
 #include "hardswish.hpp"
 #include "layer/abstract/layer_factory.hpp"
+#include <glog/logging.h>
 
 namespace TinyInfer {
 
 HardSigmoid::HardSigmoid() : NoAttrLayer("HardSigmoid") {}
 
-InferStatus HardSigmoid::Forward(const std::vector<sftensor>& inputs, std::vector<sftensor>& outputs) {
+InferStatus HardSigmoid::Forward(const std::vector<sftensor> &inputs,
+                                 std::vector<sftensor> &outputs) {
   if (inputs.empty()) {
     LOG(ERROR) << "The input tensor array is empty";
     return InferStatus::InferFailedInputEmpty;
@@ -19,22 +20,22 @@ InferStatus HardSigmoid::Forward(const std::vector<sftensor>& inputs, std::vecto
   }
 
   const uint32_t batch = inputs.size();
-  
+
 #pragma omp parallel for num_threads(batch)
   for (uint32_t b = 0; b < batch; ++b) {
-    const sftensor& input = inputs.at(b);
-    sftensor& output = outputs.at(b);
-    
-    CHECK(input != nullptr && !input->empty()) 
-        << "The " << b << "th/st/nd input tensor is empty";
+    const sftensor &input = inputs.at(b);
+    sftensor &output = outputs.at(b);
+
+    CHECK(input != nullptr && !input->empty())
+        << "The " << b << " input tensor is empty";
 
     if (output == nullptr || output->empty()) {
-      DLOG(ERROR) << "The " << b << "th/st/nd output tensor is empty";
+      DLOG(ERROR) << "The " << b << " output tensor is empty";
       output = std::make_shared<ftensor>(input->shape());
     }
 
-    CHECK(input->shape() == output->shape()) 
-        << "The " << b << "th/st/nd input and output tensor shape do not match";
+    CHECK(input->shape() == output->shape())
+        << "The " << b << " input and output tensor shape do not match";
 
     for (uint32_t i = 0; i < input->size(); ++i) {
       float in = input->index(i);
@@ -53,7 +54,8 @@ InferStatus HardSigmoid::Forward(const std::vector<sftensor>& inputs, std::vecto
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus HardSigmoid::GetInstance(const srunop& op, slayer& hardsigmoid) {
+ParseParamAttrStatus HardSigmoid::GetInstance(const srunop &op,
+                                              slayer &hardsigmoid) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -63,6 +65,7 @@ ParseParamAttrStatus HardSigmoid::GetInstance(const srunop& op, slayer& hardsigm
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-LayerRegisterWrapper HardSigmoidGetInstance("nn.Hardsigmoid", HardSigmoid::GetInstance);
+LayerRegisterWrapper HardSigmoidGetInstance("nn.Hardsigmoid",
+                                            HardSigmoid::GetInstance);
 
-}  // namespace TinyInfer
+} // namespace TinyInfer

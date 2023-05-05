@@ -1,16 +1,16 @@
-#include <gtest/gtest.h>
 #include "layer/abstract/layer_factory.hpp"
+#include <gtest/gtest.h>
 
 using namespace TinyInfer;
 
-ParseParamAttrStatus TestCreateLayer(const srunop& op, slayer& layer) {
+ParseParamAttrStatus TestCreateLayer(const srunop &op, slayer &layer) {
   layer = std::make_shared<Layer>("test3");
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
 TEST(test_layer_factory, init) {
-  const auto& reg1 = LayerRegister::CreateRegistry();
-  const auto& reg2 = LayerRegister::CreateRegistry();
+  const auto &reg1 = LayerRegister::CreateRegistry();
+  const auto &reg2 = LayerRegister::CreateRegistry();
   ASSERT_EQ(reg1, reg2);
 }
 

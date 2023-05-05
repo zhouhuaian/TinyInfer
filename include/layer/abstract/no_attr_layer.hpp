@@ -7,6 +7,6 @@ namespace TinyInfer {
 
 using NoAttrLayer = Layer;
 
-}  // namespace TinyInfer
+} // namespace TinyInfer
 
-#endif  // TINY_INFER_SOURCE_LAYER_NO_ATTR_LAYER_HPP_
+#endif // TINY_INFER_SOURCE_LAYER_NO_ATTR_LAYER_HPP_

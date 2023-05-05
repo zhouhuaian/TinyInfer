@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
 #include <glog/logging.h>
+#include <gtest/gtest.h>
 
-#include "data/tensor.hpp"
 #include "../../src/layer/details/relu.hpp"
+#include "data/tensor.hpp"
 
 using namespace TinyInfer;
 
@@ -16,10 +16,10 @@ TEST(test_layer, forward_relu1) {
   ReLU relu_layer;
   const auto status = relu_layer.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
-  
+
   for (int b = 0; b < inputs.size(); ++b) {
     sftensor input_ = inputs.at(b);
-    input_->Transform([] (const float val) { return val > 0.f ? val : 0.f; });
+    input_->Transform([](const float val) { return val > 0.f ? val : 0.f; });
     sftensor output_ = outputs.at(b);
     CHECK(input_->size() == output_->size());
     uint32_t size = input_->size();
@@ -39,10 +39,10 @@ TEST(test_layer, forward_relu2) {
   ReLU relu_layer;
   const auto status = relu_layer.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
-  
+
   for (int b = 0; b < inputs.size(); ++b) {
     sftensor input_ = inputs.at(b);
-    input_->Transform([] (const float val) { return val > 0.f ? val : 0.f; });
+    input_->Transform([](const float val) { return val > 0.f ? val : 0.f; });
     sftensor output_ = outputs.at(b);
     CHECK(input_->size() == output_->size());
     uint32_t size = input_->size();
@@ -62,10 +62,10 @@ TEST(test_layer, forward_relu3) {
   ReLU relu_layer;
   const auto status = relu_layer.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
-  
+
   for (int b = 0; b < inputs.size(); ++b) {
     sftensor input_ = inputs.at(b);
-    input_->Transform([] (const float val) { return val > 0.f ? val : 0.f; });
+    input_->Transform([](const float val) { return val > 0.f ? val : 0.f; });
     sftensor output_ = outputs.at(b);
     CHECK(input_->size() == output_->size());
     uint32_t size = input_->size();
@@ -85,10 +85,10 @@ TEST(test_layer, forward_relu4) {
   ReLU relu_layer;
   const auto status = relu_layer.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
-  
+
   for (int b = 0; b < inputs.size(); ++b) {
     sftensor input_ = inputs.at(b);
-    input_->Transform([] (const float val) { return val > 0.f ? val : 0.f; });
+    input_->Transform([](const float val) { return val > 0.f ? val : 0.f; });
     sftensor output_ = outputs.at(b);
     CHECK(input_->size() == output_->size());
     uint32_t size = input_->size();

@@ -1,8 +1,8 @@
 #ifndef TINY_INFER_INCLUDE_DATA_LOAD_DATA_HPP_
 #define TINY_INFER_INCLUDE_DATA_LOAD_DATA_HPP_
 
-#include <string>
 #include <armadillo>
+#include <string>
 
 namespace TinyInfer {
 
@@ -14,7 +14,8 @@ public:
    * @param split_char 分隔符
    * @return 初始化的矩阵
    */
-  static arma::fmat LoadData(const std::string& file_path, char split_char = ',');
+  static arma::fmat LoadData(const std::string &file_path,
+                             char split_char = ',');
 
 private:
   /**
@@ -23,9 +24,10 @@ private:
    * @param split_char 分割符
    * @return 矩阵维度
    */
-  static std::pair<size_t, size_t> GetMatrixSize(std::ifstream& file, char split_char);
+  static std::pair<size_t, size_t> GetMatrixSize(std::ifstream &file,
+                                                 char split_char);
 };
 
-}  // namespace TinyInfer
+} // namespace TinyInfer
 
-#endif  // TINY_INFER_INCLUDE_DATA_LOAD_DATA_HPP_
+#endif // TINY_INFER_INCLUDE_DATA_LOAD_DATA_HPP_

@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
 #include <glog/logging.h>
+#include <gtest/gtest.h>
 
-#include "data/tensor.hpp"
 #include "../../src/layer/details/hardswish.hpp"
+#include "data/tensor.hpp"
 
 using namespace TinyInfer;
 
@@ -20,7 +20,7 @@ TEST(test_layer, forward_hardswish1) {
     sftensor input_ = inputs.at(b);
     sftensor output_ = outputs.at(b);
     CHECK(input_->size() == output_->size());
-    input_->Transform([] (float val) {
+    input_->Transform([](float val) {
       if (val <= -3.f) {
         return 0.f;
       } else if (val >= 3.f) {
@@ -50,7 +50,7 @@ TEST(test_layer, forward_hardswish2) {
     sftensor input_ = inputs.at(b);
     sftensor output_ = outputs.at(b);
     CHECK(input_->size() == output_->size());
-    input_->Transform([] (float val) {
+    input_->Transform([](float val) {
       if (val <= -3.f) {
         return 0.f;
       } else if (val >= 3.f) {
@@ -80,7 +80,7 @@ TEST(test_layer, forward_hardswish3) {
     sftensor input_ = inputs.at(b);
     sftensor output_ = outputs.at(b);
     CHECK(input_->size() == output_->size());
-    input_->Transform([] (float val) {
+    input_->Transform([](float val) {
       if (val <= -3.f) {
         return 0.f;
       } else if (val >= 3.f) {

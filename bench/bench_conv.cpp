@@ -1,10 +1,10 @@
-#include <benchmark/benchmark.h>
 #include "../src/layer/details/convolution.hpp"
 #include "runtime/runtime_ir.hpp"
+#include <benchmark/benchmark.h>
 
 using namespace TinyInfer;
 
-static void BM_Convolutionk3x3s1x1(benchmark::State& state) {
+static void BM_Convolutionk3x3s1x1(benchmark::State &state) {
   uint32_t kernel_ct = state.range(0);
   uint32_t channels = state.range(1);
   uint32_t rows = state.range(2);
@@ -19,14 +19,12 @@ static void BM_Convolutionk3x3s1x1(benchmark::State& state) {
 
   std::vector<sftensor> weights(kernel_ct);
   for (uint32_t k = 0; k < kernel_ct; ++k) {
-    auto& weight = weights.at(k);
+    auto &weight = weights.at(k);
     weight = std::make_shared<ftensor>(channels, 3, 3);
     weight->Rand();
   }
 
-  Convolution convolution(kernel_ct, channels, 3, 
-                         3, 0, 0, 1, 
-                         1, 1, false);
+  Convolution convolution(kernel_ct, channels, 3, 3, 0, 0, 1, 1, 1, false);
   convolution.set_weights(weights);
 
   for (auto _ : state) {

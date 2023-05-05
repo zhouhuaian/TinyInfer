@@ -7,13 +7,14 @@ namespace TinyInfer {
 
 class HardSwish : public NoAttrLayer {
 public:
-    explicit HardSwish();
+  explicit HardSwish();
 
-    InferStatus Forward(const std::vector<sftensor>& inputs, std::vector<sftensor>& outputs) override;
+  InferStatus Forward(const std::vector<sftensor> &inputs,
+                      std::vector<sftensor> &outputs) override;
 
-    static ParseParamAttrStatus GetInstance(const srunop& op, slayer& hardswish);
+  static ParseParamAttrStatus GetInstance(const srunop &op, slayer &hardswish);
 };
 
-}  // namespace TinyInfer
+} // namespace TinyInfer
 
-#endif  // TINY_INFER_SOURCE_LAYER_HARDSWISH_HPP_
+#endif // TINY_INFER_SOURCE_LAYER_HARDSWISH_HPP_

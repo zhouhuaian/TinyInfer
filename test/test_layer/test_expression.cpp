@@ -1,14 +1,14 @@
-#include <gtest/gtest.h>
+#include "../../src/layer/details/expression.hpp"
+#include "data/load_data.hpp"
 #include "parser/parse_expr.hpp"
 #include "runtime/runtime_ir.hpp"
-#include "data/load_data.hpp"
-#include "../../src/layer/details/expression.hpp"
+#include <gtest/gtest.h>
 
 using namespace TinyInfer;
 
 TEST(test_expression, add1) {
   RuntimeGraph graph("../../tmp/add/resnet_add.pnnx.param",
-                    "../../tmp/add/resnet_add.pnnx.bin");
+                     "../../tmp/add/resnet_add.pnnx.bin");
 
   graph.Build("pnnx_input_0", "pnnx_output_0");
 
@@ -24,8 +24,8 @@ TEST(test_expression, add1) {
   std::vector<sftensor> outputs = graph.Forward(inputs, false);
   ASSERT_EQ(outputs.size(), 4);
 
-  const auto& output1 = outputs.at(0)->slice(0);
-  const auto& output2 = CSVDataLoader::LoadData("../../tmp/add/1.csv");
+  const auto &output1 = outputs.at(0)->slice(0);
+  const auto &output2 = CSVDataLoader::LoadData("../../tmp/add/1.csv");
   ASSERT_EQ(output1.size(), output2.size());
 
   const uint32_t size = output1.size();
@@ -36,7 +36,7 @@ TEST(test_expression, add1) {
 
 TEST(test_expression, add2) {
   RuntimeGraph graph("../../tmp/add/resnet_add2.pnnx.param",
-                    "../../tmp/add/resnet_add2.pnnx.bin");
+                     "../../tmp/add/resnet_add2.pnnx.bin");
 
   graph.Build("pnnx_input_0", "pnnx_output_0");
 
@@ -52,8 +52,8 @@ TEST(test_expression, add2) {
   std::vector<sftensor> outputs = graph.Forward(inputs, false);
   ASSERT_EQ(outputs.size(), 4);
 
-  const auto& output1 = outputs.at(0)->slice(0);
-  const auto& output2 = CSVDataLoader::LoadData("../../tmp/add/3.csv");
+  const auto &output1 = outputs.at(0)->slice(0);
+  const auto &output2 = CSVDataLoader::LoadData("../../tmp/add/3.csv");
   ASSERT_EQ(output1.size(), output2.size());
 
   const uint32_t size = output1.size();
@@ -64,7 +64,7 @@ TEST(test_expression, add2) {
 
 TEST(test_expression, mul1) {
   RuntimeGraph graph("../../tmp/add/resnet_add3.pnnx.param",
-                    "../../tmp/add/resnet_add3.pnnx.bin");
+                     "../../tmp/add/resnet_add3.pnnx.bin");
 
   graph.Build("pnnx_input_0", "pnnx_output_0");
 
@@ -80,8 +80,8 @@ TEST(test_expression, mul1) {
   std::vector<sftensor> outputs = graph.Forward(inputs, false);
   ASSERT_EQ(outputs.size(), 4);
 
-  const auto& output1 = outputs.at(0)->slice(0);
-  const auto& output2 = CSVDataLoader::LoadData("../../tmp/add/7.csv");
+  const auto &output1 = outputs.at(0)->slice(0);
+  const auto &output2 = CSVDataLoader::LoadData("../../tmp/add/7.csv");
   ASSERT_EQ(output1.size(), output2.size());
 
   const uint32_t size = output1.size();
@@ -91,7 +91,7 @@ TEST(test_expression, mul1) {
 }
 
 TEST(test_layer, add1) {
-  const std::string& str = "add(@0,@1)";
+  const std::string &str = "add(@0,@1)";
   Expression expression(str);
   sftensor input1 = std::make_shared<ftensor>(3, 224, 224);
   input1->Fill(1.f);
@@ -110,11 +110,12 @@ TEST(test_layer, add1) {
   output2->Fill(2.f);
 
   sftensor output1 = outputs.front();
-  ASSERT_TRUE(arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
+  ASSERT_TRUE(
+      arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
 }
 
 TEST(test_layer, add2) {
-  const std::string& str = "add(@0,@1)";
+  const std::string &str = "add(@0,@1)";
   Expression expression(str);
   sftensor input1 = std::make_shared<ftensor>(3, 224, 224);
   input1->Fill(2.f);
@@ -133,11 +134,12 @@ TEST(test_layer, add2) {
   output2->Fill(5.f);
   sftensor output1 = outputs.front();
 
-  ASSERT_TRUE(arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
+  ASSERT_TRUE(
+      arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
 }
 
 TEST(test_layer, mul1) {
-  const std::string& str = "mul(@0,@1)";
+  const std::string &str = "mul(@0,@1)";
   Expression expression(str);
   sftensor input1 = std::make_shared<ftensor>(3, 224, 224);
   input1->Fill(2.f);
@@ -156,11 +158,12 @@ TEST(test_layer, mul1) {
   output2->Fill(6.f);
   sftensor output1 = outputs.front();
 
-  ASSERT_TRUE(arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
+  ASSERT_TRUE(
+      arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
 }
 
 TEST(test_layer, complex1) {
-  const std::string& str = "mul(@2,add(@0,@1))";
+  const std::string &str = "mul(@2,add(@0,@1))";
   Expression expression(str);
   sftensor input1 = std::make_shared<ftensor>(3, 224, 224);
   input1->Fill(2.f);
@@ -184,11 +187,12 @@ TEST(test_layer, complex1) {
   output2->Fill(20.f);
   sftensor output1 = outputs.front();
 
-  ASSERT_TRUE(arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
+  ASSERT_TRUE(
+      arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
 }
 
 TEST(test_layer, complex2) {
-  const std::string& str = "mul(add(@0,@1),add(@2,@3))";
+  const std::string &str = "mul(add(@0,@1),add(@2,@3))";
   Expression expression(str);
   sftensor input1 = std::make_shared<ftensor>(3, 224, 224);
   input1->Fill(2.f);
@@ -216,11 +220,12 @@ TEST(test_layer, complex2) {
   output2->Fill(40.f);
   sftensor output1 = outputs.front();
 
-  ASSERT_TRUE(arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
+  ASSERT_TRUE(
+      arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
 }
 
 TEST(test_layer, complex3) {
-  const std::string& str = "mul(mul(@0,@1),add(@2,@3))";
+  const std::string &str = "mul(mul(@0,@1),add(@2,@3))";
   Expression expression(str);
   sftensor input1 = std::make_shared<ftensor>(3, 224, 224);
   input1->Fill(2.f);
@@ -248,11 +253,12 @@ TEST(test_layer, complex3) {
   output2->Fill(48.f);
   sftensor output1 = outputs.front();
 
-  ASSERT_TRUE(arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
+  ASSERT_TRUE(
+      arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
 }
 
 TEST(test_layer, complex4) {
-  const std::string& str = "mul(mul(@0,@1), mul(@2,@3))";
+  const std::string &str = "mul(mul(@0,@1), mul(@2,@3))";
   Expression expression(str);
   sftensor input1 = std::make_shared<ftensor>(3, 224, 224);
   input1->Fill(2.f);
@@ -280,11 +286,12 @@ TEST(test_layer, complex4) {
   output2->Fill(96.f);
   sftensor output1 = outputs.front();
 
-  ASSERT_TRUE(arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
+  ASSERT_TRUE(
+      arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
 }
 
 TEST(test_layer, complex5) {
-  const std::string& str = "mul(mul(@0,@1), mul(@2,add(@3,@4)))";
+  const std::string &str = "mul(mul(@0,@1), mul(@2,add(@3,@4)))";
   Expression expression(str);
   sftensor input1 = std::make_shared<ftensor>(3, 224, 224);
   input1->Fill(1.f);
@@ -316,11 +323,12 @@ TEST(test_layer, complex5) {
   output2->Fill(54.f);
   sftensor output1 = outputs.front();
 
-  ASSERT_TRUE(arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
+  ASSERT_TRUE(
+      arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
 }
 
 TEST(test_layer, complex6) {
-  const std::string& str = "mul(mul(@0,@1), mul(@2,mul(@3,@4)))";
+  const std::string &str = "mul(mul(@0,@1), mul(@2,mul(@3,@4)))";
   Expression expression(str);
   sftensor input1 = std::make_shared<ftensor>(3, 224, 224);
   input1->Fill(1.f);
@@ -352,17 +360,18 @@ TEST(test_layer, complex6) {
   output2->Fill(120.f);
   sftensor output1 = outputs.front();
 
-  ASSERT_TRUE(arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
+  ASSERT_TRUE(
+      arma::approx_equal(output1->data(), output2->data(), "absdiff", 1e-5));
 }
 
 TEST(test_parser, tokenize) {
-  const std::string& str = "add(add(add(@0,@1),@1),add(@0,@2))";
+  const std::string &str = "add(add(add(@0,@1),@1),add(@0,@2))";
   ExprParser parser(str);
   parser.Tokenize();
-  const auto& tokens = parser.Tokens();
+  const auto &tokens = parser.Tokens();
   ASSERT_EQ(tokens.empty(), false);
 
-  const auto& token_strs = parser.TokenStrs();
+  const auto &token_strs = parser.TokenStrs();
   ASSERT_EQ(token_strs.empty(), false);
 
   ASSERT_EQ(token_strs.at(0), "add");
@@ -426,17 +435,16 @@ TEST(test_parser, tokenize) {
   ASSERT_EQ(tokens.at(19).type, TokenType::TokenRBracket);
   ASSERT_EQ(token_strs.at(20), ")");
   ASSERT_EQ(tokens.at(20).type, TokenType::TokenRBracket);
-
 }
 
 TEST(test_parser, tokenize2) {
-  const std::string& str = "add(add(add(@0,@1),@1),add(@0,add(@1,@1)))";
+  const std::string &str = "add(add(add(@0,@1),@1),add(@0,add(@1,@1)))";
   ExprParser parser(str);
   parser.Tokenize();
-  const auto& tokens = parser.Tokens();
+  const auto &tokens = parser.Tokens();
   ASSERT_EQ(tokens.empty(), false);
 
-  const auto& token_strs = parser.TokenStrs();
+  const auto &token_strs = parser.TokenStrs();
   ASSERT_EQ(token_strs.empty(), false);
 
   ASSERT_EQ(token_strs.at(0), "add");
@@ -519,13 +527,13 @@ TEST(test_parser, tokenize2) {
 }
 
 TEST(test_parser, tokenize3) {
-  const std::string& str = "add(add(add(@0,@1),@2),mul(@0,@2))";
+  const std::string &str = "add(add(add(@0,@1),@2),mul(@0,@2))";
   ExprParser parser(str);
   parser.Tokenize();
-  const auto& tokens = parser.Tokens();
+  const auto &tokens = parser.Tokens();
   ASSERT_EQ(tokens.empty(), false);
 
-  const auto& token_strs = parser.TokenStrs();
+  const auto &token_strs = parser.TokenStrs();
   ASSERT_EQ(token_strs.at(0), "add");
   ASSERT_EQ(tokens.at(0).type, TokenType::TokenAdd);
 
@@ -573,14 +581,13 @@ TEST(test_parser, tokenize3) {
 
   ASSERT_EQ(token_strs.at(15), "(");
   ASSERT_EQ(tokens.at(15).type, TokenType::TokenLBracket);
-
 }
 
 TEST(test_parser, generate1) {
-  const std::string& str = "add(@0,@1)";
+  const std::string &str = "add(@0,@1)";
   ExprParser parser(str);
   parser.Tokenize();
-  const auto& nodes = parser.Generate();
+  const auto &nodes = parser.Generate();
   ASSERT_EQ(nodes.size(), 3);
   ASSERT_EQ(nodes.at(0)->num, 0);
   ASSERT_EQ(nodes.at(1)->num, 1);
@@ -588,10 +595,10 @@ TEST(test_parser, generate1) {
 }
 
 TEST(test_parser, generate2) {
-  const std::string& str = "add(@0,add(@1,@2))";
+  const std::string &str = "add(@0,add(@1,@2))";
   ExprParser parser(str);
   parser.Tokenize();
-  const auto& nodes = parser.Generate();
+  const auto &nodes = parser.Generate();
   ASSERT_EQ(nodes.size(), 5);
   ASSERT_EQ(nodes.at(0)->num, 0);
   ASSERT_EQ(nodes.at(1)->num, 1);
@@ -599,15 +606,14 @@ TEST(test_parser, generate2) {
 
   ASSERT_EQ(nodes.at(3)->num, int(TokenType::TokenAdd));
   ASSERT_EQ(nodes.at(4)->num, int(TokenType::TokenAdd));
-
 }
 
 TEST(test_parser, generate3) {
-  const std::string& str = "add(@0,add(@1,add(@3,@4)))";
+  const std::string &str = "add(@0,add(@1,add(@3,@4)))";
   ExprParser parser(str);
   parser.Tokenize();
-  const auto& nodes = parser.Generate();
-  ASSERT_EQ(nodes.size(),7);
+  const auto &nodes = parser.Generate();
+  ASSERT_EQ(nodes.size(), 7);
   ASSERT_EQ(nodes.at(0)->num, 0);
   ASSERT_EQ(nodes.at(1)->num, 1);
   ASSERT_EQ(nodes.at(2)->num, 3);
@@ -616,14 +622,13 @@ TEST(test_parser, generate3) {
   ASSERT_EQ(nodes.at(4)->num, int(TokenType::TokenAdd));
   ASSERT_EQ(nodes.at(5)->num, int(TokenType::TokenAdd));
   ASSERT_EQ(nodes.at(6)->num, int(TokenType::TokenAdd));
-
 }
 
 TEST(test_parser, generate4) {
-  const std::string& str = "add(@0,add(@1,add(@3,mul(@4,@5))))";
+  const std::string &str = "add(@0,add(@1,add(@3,mul(@4,@5))))";
   ExprParser parser(str);
   parser.Tokenize();
-  const auto& nodes = parser.Generate();
+  const auto &nodes = parser.Generate();
   ASSERT_EQ(nodes.size(), 9);
   ASSERT_EQ(nodes.at(0)->num, 0);
   ASSERT_EQ(nodes.at(1)->num, 1);

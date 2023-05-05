@@ -16,6 +16,6 @@ enum class RuntimeDataType {
   TypeUInt8 = 8,
 };
 
-}  // namespace TinyInfer
+} // namespace TinyInfer
 
-#endif  // TINY_INFER_INCLUDE_RUNTIME_RUNTIME_DATATYPE_HPP_
+#endif // TINY_INFER_INCLUDE_RUNTIME_RUNTIME_DATATYPE_HPP_

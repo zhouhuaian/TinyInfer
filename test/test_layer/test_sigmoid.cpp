@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
 #include <glog/logging.h>
+#include <gtest/gtest.h>
 
-#include "data/tensor.hpp"
 #include "../../src/layer/details/sigmoid.hpp"
+#include "data/tensor.hpp"
 
 using namespace TinyInfer;
 
@@ -15,7 +15,7 @@ TEST(test_layer, forward_sigmoid1) {
 
   std::vector<sftensor> inputs;
   inputs.push_back(input);
-  
+
   std::vector<sftensor> outputs;
   sftensor output = std::make_shared<ftensor>(1, 1, 4);
   outputs.push_back(output);
@@ -38,7 +38,7 @@ TEST(test_layer, forward_sigmoid2) {
 
   std::vector<sftensor> inputs;
   inputs.push_back(input);
-  
+
   std::vector<sftensor> outputs;
   sftensor output = std::make_shared<ftensor>(1, 1, 4);
   outputs.push_back(output);
@@ -68,7 +68,8 @@ TEST(test_layer, forward_sigmoid3) {
     CHECK(input_->size() == output_->size());
     uint32_t size = input_->size();
     for (uint32_t i = 0; i < size; ++i) {
-      ASSERT_LE(output_->index(i) - 1.f / (1.f + std::exp(-input_->index(i))), 1e-6);
+      ASSERT_LE(output_->index(i) - 1.f / (1.f + std::exp(-input_->index(i))),
+                1e-6);
     }
   }
 }
@@ -89,7 +90,8 @@ TEST(test_layer, forward_sigmoid4) {
     CHECK(input_->size() == output_->size());
     uint32_t size = input_->size();
     for (uint32_t i = 0; i < size; ++i) {
-      ASSERT_LE(output_->index(i) - 1.f / (1.f + std::exp(-input_->index(i))), 1e-6);
+      ASSERT_LE(output_->index(i) - 1.f / (1.f + std::exp(-input_->index(i))),
+                1e-6);
     }
   }
 }
@@ -110,7 +112,8 @@ TEST(test_layer, forward_sigmoid5) {
     CHECK(input_->size() == output_->size());
     uint32_t size = input_->size();
     for (uint32_t i = 0; i < size; ++i) {
-      ASSERT_LE(output_->index(i) - 1.f / (1.f + std::exp(-input_->index(i))), 1e-6);
+      ASSERT_LE(output_->index(i) - 1.f / (1.f + std::exp(-input_->index(i))),
+                1e-6);
     }
   }
 }

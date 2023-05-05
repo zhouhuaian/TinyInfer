@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
 #include "layer/abstract/attr_layer.hpp"
+#include <gtest/gtest.h>
 
 using namespace TinyInfer;
 
@@ -14,14 +14,14 @@ TEST(test_attr_layer, set_weights1) {
   }
 
   attr_layer.set_weights(weights);
-  const auto& weights_ = attr_layer.weights();
+  const auto &weights_ = attr_layer.weights();
   ASSERT_EQ(weights.size(), weights_.size());
 
   for (uint32_t i = 0; i < weight_count; ++i) {
-    const auto& weight_ = weights_.at(i);
-    const auto& weight = weights.at(i);
+    const auto &weight_ = weights_.at(i);
+    const auto &weight = weights.at(i);
     ASSERT_EQ(weight->size(), weight_->size());
-    
+
     for (uint32_t j = 0; j < weight->size(); ++j) {
       ASSERT_EQ(weight->index(j), weight_->index(j));
     }
@@ -38,14 +38,14 @@ TEST(test_attr_layer, set_bias1) {
     biases.push_back(bias);
   }
   attr_layer.set_bias(biases);
-  const auto& biases_ = attr_layer.bias();
+  const auto &biases_ = attr_layer.bias();
   ASSERT_EQ(biases.size(), biases_.size());
 
   for (uint32_t i = 0; i < bias_count; ++i) {
-    const auto& bias_ = biases_.at(i);
-    const auto& bias = biases.at(i);
+    const auto &bias_ = biases_.at(i);
+    const auto &bias = biases.at(i);
     ASSERT_EQ(bias->size(), bias_->size());
-    
+
     for (uint32_t j = 0; j < bias->size(); ++j) {
       ASSERT_EQ(bias->index(j), bias_->index(j));
     }
@@ -65,7 +65,7 @@ TEST(test_attr_layer, set_weights2) {
   weights_.push_back(weight);
   attr_layer.set_weights(weights_);
   attr_layer.set_weights(weight_vals);
-  
+
   weights_ = attr_layer.weights();
   for (int i = 0; i < weights_.size(); ++i) {
     const auto weight_ = weights_.at(i);
@@ -92,7 +92,7 @@ TEST(test_attr_layer, set_bias2) {
   biases_.push_back(bias);
   attr_layer.set_bias(biases_);
   attr_layer.set_bias(bias_vals);
-  
+
   biases_ = attr_layer.bias();
   for (int i = 0; i < biases_.size(); ++i) {
     const auto bias_ = biases_.at(i);

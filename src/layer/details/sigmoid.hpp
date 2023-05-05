@@ -7,13 +7,14 @@ namespace TinyInfer {
 
 class Sigmoid : public NoAttrLayer {
 public:
-    explicit Sigmoid();
+  explicit Sigmoid();
 
-    InferStatus Forward(const std::vector<sftensor>& inputs, std::vector<sftensor>& outputs) override;
+  InferStatus Forward(const std::vector<sftensor> &inputs,
+                      std::vector<sftensor> &outputs) override;
 
-    static ParseParamAttrStatus GetInstance(const srunop& op, slayer& sigmoid);
+  static ParseParamAttrStatus GetInstance(const srunop &op, slayer &sigmoid);
 };
 
-}
+} // namespace TinyInfer
 
-#endif  // TINY_INFER_SOURCE_LAYER_SIGMOID_HPP_
+#endif // TINY_INFER_SOURCE_LAYER_SIGMOID_HPP_

@@ -1,13 +1,14 @@
-#include <string>
-#include <fstream>
-#include <armadillo>
-#include <utility>
-#include <glog/logging.h>
 #include "data/load_data.hpp"
+#include <armadillo>
+#include <fstream>
+#include <glog/logging.h>
+#include <string>
+#include <utility>
 
 namespace TinyInfer {
 
-arma::fmat CSVDataLoader::LoadData(const std::string& file_path, const char split_char) {
+arma::fmat CSVDataLoader::LoadData(const std::string &file_path,
+                                   const char split_char) {
   arma::fmat data;
   if (file_path.empty()) {
     LOG(ERROR) << "CSV file path is empty: " << file_path;
@@ -23,8 +24,8 @@ arma::fmat CSVDataLoader::LoadData(const std::string& file_path, const char spli
   std::string line_str;
   std::stringstream line_stream;
 
-  const auto& [rows, cols] = CSVDataLoader::GetMatrixSize(in, split_char);
-  data.zeros(rows, cols);  // 初始化全0的fmat，行列数为(rows, cols)
+  const auto &[rows, cols] = CSVDataLoader::GetMatrixSize(in, split_char);
+  data.zeros(rows, cols); // 初始化全0的fmat，行列数为(rows, cols)
 
   size_t row = 0;
   while (in.good()) {
@@ -36,7 +37,7 @@ arma::fmat CSVDataLoader::LoadData(const std::string& file_path, const char spli
 
     std::string token;
     line_stream.clear();
-    
+
     line_stream.str(line_str);
     size_t col = 0;
     while (line_stream.good()) {
@@ -44,9 +45,9 @@ arma::fmat CSVDataLoader::LoadData(const std::string& file_path, const char spli
       std::getline(line_stream, token, split_char);
       try {
         data.at(row, col) = std::stof(token);
-      }
-      catch (std::exception& e) {
-        DLOG(ERROR) << "Parse CSV File meet error: " << e.what() << " row: " << row << " col: " << col;
+      } catch (std::exception &e) {
+        DLOG(ERROR) << "Parse CSV File meet error: " << e.what()
+                    << " row: " << row << " col: " << col;
       }
       col += 1;
       CHECK(col <= cols) << "There are excessive elements on the column";
@@ -55,11 +56,12 @@ arma::fmat CSVDataLoader::LoadData(const std::string& file_path, const char spli
     row += 1;
     CHECK(row <= rows) << "There are excessive elements on the row";
   }
-  
+
   return data;
 }
 
-std::pair<size_t, size_t> CSVDataLoader::GetMatrixSize(std::ifstream& file, char split_char) {
+std::pair<size_t, size_t> CSVDataLoader::GetMatrixSize(std::ifstream &file,
+                                                       char split_char) {
   bool load_ok = file.good();
   file.clear();
   size_t fn_rows = 0;
@@ -80,7 +82,7 @@ std::pair<size_t, size_t> CSVDataLoader::GetMatrixSize(std::ifstream& file, char
     // 将string对象转化为stringstream对象
     line_stream.clear();
     line_stream.str(line_str);
-    
+
     size_t line_cols = 0;
     std::string row_token;
     while (line_stream.good()) {
@@ -100,4 +102,4 @@ std::pair<size_t, size_t> CSVDataLoader::GetMatrixSize(std::ifstream& file, char
   return {fn_rows, fn_cols};
 }
 
-}  // namespace TinyInfer
+} // namespace TinyInfer

@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
-#include <glog/logging.h>
-#include "data/tensor.hpp"
 #include "../../src/layer/details/cat.hpp"
+#include "data/tensor.hpp"
+#include <glog/logging.h>
+#include <gtest/gtest.h>
 
 using namespace TinyInfer;
 
@@ -18,12 +18,12 @@ TEST(test_layer, cat1) {
     input->Rand();
     inputs.push_back(input);
   }
-  
+
   std::vector<sftensor> outputs(out_batch);
   Cat cat(1);
   const auto status = cat.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
-  
+
   for (uint32_t b = 0; b < out_batch; ++b) {
     ASSERT_EQ(outputs.at(b)->channels(), out_channels);
   }
@@ -31,15 +31,16 @@ TEST(test_layer, cat1) {
   for (int ib = 0; ib < in_batch / 2; ++ib) {
     for (int ic = 0; ic < in_channels; ++ic) {
       ASSERT_TRUE(arma::approx_equal(inputs.at(ib)->slice(ic),
-                                     outputs.at(ib)->slice(ic), "absdiff", 0.01f));
+                                     outputs.at(ib)->slice(ic), "absdiff",
+                                     0.01f));
     }
   }
 
   for (int ib = in_batch / 2; ib < in_batch; ++ib) {
     for (int ic = in_channels; ic < in_channels * 2; ++ic) {
-      ASSERT_TRUE(arma::approx_equal(
-          inputs.at(ib)->slice(ic - in_channels),
-          outputs.at(ib - out_batch)->slice(ic), "absdiff", 0.01f));
+      ASSERT_TRUE(arma::approx_equal(inputs.at(ib)->slice(ic - in_channels),
+                                     outputs.at(ib - out_batch)->slice(ic),
+                                     "absdiff", 0.01f));
     }
   }
 }
@@ -61,7 +62,7 @@ TEST(test_layer, cat2) {
   Cat cat(1);
   const auto status = cat.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
-  
+
   for (uint32_t b = 0; b < out_batch; ++b) {
     ASSERT_EQ(outputs.at(b)->channels(), out_channels);
   }
@@ -69,15 +70,16 @@ TEST(test_layer, cat2) {
   for (int ib = 0; ib < in_batch / 2; ++ib) {
     for (int ic = 0; ic < in_channels; ++ic) {
       ASSERT_TRUE(arma::approx_equal(inputs.at(ib)->slice(ic),
-                                     outputs.at(ib)->slice(ic), "absdiff", 0.01f));
+                                     outputs.at(ib)->slice(ic), "absdiff",
+                                     0.01f));
     }
   }
 
   for (int ib = in_batch / 2; ib < in_batch; ++ib) {
     for (int ic = in_channels; ic < in_channels * 2; ++ic) {
-      ASSERT_TRUE(arma::approx_equal(
-          inputs.at(ib)->slice(ic - in_channels),
-          outputs.at(ib - out_batch)->slice(ic), "absdiff", 0.01f));
+      ASSERT_TRUE(arma::approx_equal(inputs.at(ib)->slice(ic - in_channels),
+                                     outputs.at(ib - out_batch)->slice(ic),
+                                     "absdiff", 0.01f));
     }
   }
 }
@@ -101,14 +103,14 @@ TEST(test_layer, cat3) {
   Cat cat(1);
   const auto status = cat.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
-  
+
   for (uint32_t b = 0; b < out_batch; ++b) {
     ASSERT_EQ(outputs.at(b)->channels(), out_channels);
   }
 
   for (int ib = 0; ib < in_batch; ++ib) {
-    const arma::fmat& in_channel = inputs.at(ib)->slice(0);
-    const arma::fmat& out_channel = outputs.at(0)->slice(ib);
+    const arma::fmat &in_channel = inputs.at(ib)->slice(0);
+    const arma::fmat &out_channel = outputs.at(0)->slice(ib);
     ASSERT_TRUE(arma::approx_equal(in_channel, out_channel, "absdiff", 0.01f));
   }
 }
@@ -132,14 +134,14 @@ TEST(test_layer, cat4) {
   Cat cat(1);
   const auto status = cat.Forward(inputs, outputs);
   ASSERT_EQ(status, InferStatus::InferSuccess);
-  
+
   for (uint32_t b = 0; b < out_batch; ++b) {
     ASSERT_EQ(outputs.at(b)->channels(), out_channels);
   }
 
   for (int ib = 0; ib < in_batch; ++ib) {
-    const arma::fmat& in_channel = inputs.at(ib)->slice(0);
-    const arma::fmat& out_channel = outputs.at(0)->slice(ib);
+    const arma::fmat &in_channel = inputs.at(ib)->slice(0);
+    const arma::fmat &out_channel = outputs.at(0)->slice(ib);
     ASSERT_TRUE(arma::approx_equal(in_channel, out_channel, "absdiff", 0.01f));
   }
 }

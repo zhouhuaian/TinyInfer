@@ -1,18 +1,18 @@
-#include <string>
-#include <gtest/gtest.h>
-#include <glog/logging.h>
 #include "data/load_data.hpp"
+#include <glog/logging.h>
+#include <gtest/gtest.h>
+#include <string>
 
 const std::string test_file_dir = "../../tmp/data_loader/";
 
 using namespace TinyInfer;
 
 TEST(test_load, load_csv_data) {
-  const arma::fmat& data = CSVDataLoader::LoadData(test_file_dir + "data1.csv");
+  const arma::fmat &data = CSVDataLoader::LoadData(test_file_dir + "data1.csv");
   ASSERT_NE(data.empty(), true);
   ASSERT_EQ(data.n_rows, 3);
   ASSERT_EQ(data.n_cols, 4);
-  
+
   const uint32_t rows = data.n_rows;
   const uint32_t cols = data.n_cols;
   for (uint32_t i = 0; i < rows; ++i) {
@@ -23,7 +23,7 @@ TEST(test_load, load_csv_data) {
 }
 
 TEST(test_load, load_csv_arange) {
-  const arma::fmat& data = CSVDataLoader::LoadData(test_file_dir + "data2.csv");
+  const arma::fmat &data = CSVDataLoader::LoadData(test_file_dir + "data2.csv");
   ASSERT_NE(data.empty(), true);
   ASSERT_EQ(data.n_rows, 3);
   ASSERT_EQ(data.n_cols, 4);
@@ -40,11 +40,11 @@ TEST(test_load, load_csv_arange) {
 }
 
 TEST(test_load, load_csv_missing_data1) {
-  const arma::fmat& data = CSVDataLoader::LoadData(test_file_dir + "data4.csv");
+  const arma::fmat &data = CSVDataLoader::LoadData(test_file_dir + "data4.csv");
   ASSERT_NE(data.empty(), true);
   ASSERT_EQ(data.n_rows, 3);
   ASSERT_EQ(data.n_cols, 11);
-  
+
   int data_one = 0;
   const uint32_t rows = data.n_rows;
   const uint32_t cols = data.n_cols;
@@ -60,7 +60,7 @@ TEST(test_load, load_csv_missing_data1) {
 }
 
 TEST(test_load, load_csv_missing_data2) {
-  const arma::fmat& data = CSVDataLoader::LoadData(test_file_dir + "data3.csv");
+  const arma::fmat &data = CSVDataLoader::LoadData(test_file_dir + "data3.csv");
   ASSERT_NE(data.empty(), true);
   ASSERT_EQ(data.n_rows, 3);
   ASSERT_EQ(data.n_cols, 11);
@@ -84,7 +84,8 @@ TEST(test_load, load_csv_missing_data2) {
 }
 
 TEST(test_load, split_char) {
-  const arma::fmat& data = CSVDataLoader::LoadData(test_file_dir + "data5.csv", '-');
+  const arma::fmat &data =
+      CSVDataLoader::LoadData(test_file_dir + "data5.csv", '-');
   ASSERT_NE(data.empty(), true);
   ASSERT_EQ(data.n_rows, 3);
   ASSERT_EQ(data.n_cols, 11);
@@ -99,7 +100,8 @@ TEST(test_load, split_char) {
 }
 
 TEST(test_load, load_minus_data) {
-  const arma::fmat& data = CSVDataLoader::LoadData(test_file_dir + "data6.csv", ',');
+  const arma::fmat &data =
+      CSVDataLoader::LoadData(test_file_dir + "data6.csv", ',');
   ASSERT_NE(data.empty(), true);
   ASSERT_EQ(data.n_rows, 3);
   ASSERT_EQ(data.n_cols, 11);
@@ -119,7 +121,8 @@ TEST(test_load, load_minus_data) {
 }
 
 TEST(test_load, load_large_data) {
-  const arma::fmat& data = CSVDataLoader::LoadData(test_file_dir + "data7.csv", ',');
+  const arma::fmat &data =
+      CSVDataLoader::LoadData(test_file_dir + "data7.csv", ',');
   ASSERT_NE(data.empty(), true);
   ASSERT_EQ(data.n_rows, 1024);
   ASSERT_EQ(data.n_cols, 1024);
@@ -139,6 +142,7 @@ TEST(test_load, load_large_data) {
 }
 
 TEST(test_load, load_empty_data) {
-  const arma::fmat& data = CSVDataLoader::LoadData(test_file_dir + "notexists.csv", ',');
+  const arma::fmat &data =
+      CSVDataLoader::LoadData(test_file_dir + "notexists.csv", ',');
   ASSERT_EQ(data.empty(), true);
 }

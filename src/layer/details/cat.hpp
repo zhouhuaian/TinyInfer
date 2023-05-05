@@ -9,14 +9,15 @@ class Cat : public NoAttrLayer {
 public:
   explicit Cat(int dim = 0);
 
-  InferStatus Forward(const std::vector<sftensor>& inputs, std::vector<sftensor>& outputs) override;
+  InferStatus Forward(const std::vector<sftensor> &inputs,
+                      std::vector<sftensor> &outputs) override;
 
-  static ParseParamAttrStatus GetInstance(const srunop& op, slayer& cat);
+  static ParseParamAttrStatus GetInstance(const srunop &op, slayer &cat);
 
 private:
-  int32_t dim_;  // 拼接维度
+  int32_t dim_; // 拼接维度
 };
 
-}  // namespace TinyInfer
+} // namespace TinyInfer
 
-#endif  // TINY_INFER_SOURCE_LAYER_DETAILS_CAT_HPP_
+#endif // TINY_INFER_SOURCE_LAYER_DETAILS_CAT_HPP_
