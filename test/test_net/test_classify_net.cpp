@@ -1,5 +1,5 @@
 #include "data/load_data.hpp"
-#include "runtime/runtime_ir.hpp"
+#include "runtime/runtime_graph.hpp"
 #include <glog/logging.h>
 #include <gtest/gtest.h>
 

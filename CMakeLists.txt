@@ -38,8 +38,8 @@ find_package(BLAS REQUIRED)
 find_package(LAPACK REQUIRED)
 
 aux_source_directory(./src/data DIR_DATA)
-aux_source_directory(./src/layer/abstract DIR_ABSTRACT_LAYER)
-aux_source_directory(./src/layer/details DIR_DETAILS_LAYER)
+aux_source_directory(./src/kernel/abstract DIR_ABSTRACT_KERNEL)
+aux_source_directory(./src/kernel/details DIR_DETAILS_KERNEL)
 aux_source_directory(./src/parser DIR_PARSER)
 aux_source_directory(./src/runtime DIR_RUNTIME)
 
@@ -50,7 +50,7 @@ ENDIF ()
 
 set(link_math_lib ${ARMADILLO_LIBRARIES} ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
 
-add_library(tinyinfer SHARED ${DIR_DATA} ${DIR_ABSTRACT_LAYER} ${DIR_DETAILS_LAYER} ${DIR_PARSER} ${DIR_RUNTIME})
+add_library(tinyinfer SHARED ${DIR_DATA} ${DIR_ABSTRACT_KERNEL} ${DIR_DETAILS_KERNEL} ${DIR_PARSER} ${DIR_RUNTIME})
 target_link_libraries(tinyinfer ${link_lib} ${link_math_lib} OpenMP::OpenMP_CXX)
 
 target_include_directories(tinyinfer PUBLIC ${benchmark_INCLUDE_DIRS})

@@ -11,7 +11,7 @@
 namespace TinyInfer {
 
 // 计算图中的操作数
-struct RuntimeOperand {
+struct RuntimeOprand {
   std::string name;           // 操作数名称
   std::vector<int32_t> shape; // 操作数维度
   std::vector<sftensor>
@@ -19,7 +19,7 @@ struct RuntimeOperand {
   RuntimeDataType type = RuntimeDataType::TypeUnknown; // 操作数值类型
 };
 
-using srunoprand = std::shared_ptr<RuntimeOperand>;
+using srunoprand = std::shared_ptr<RuntimeOprand>;
 
 } // namespace TinyInfer
 

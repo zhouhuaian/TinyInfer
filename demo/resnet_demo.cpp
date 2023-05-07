@@ -1,6 +1,6 @@
-#include "../src/layer/details/softmax.hpp"
+#include "../src/kernel/details/softmax.hpp"
 #include "data/tensor.hpp"
-#include "runtime/runtime_ir.hpp"
+#include "runtime/runtime_graph.hpp"
 #include "tick.hpp"
 #include <algorithm>
 #include <cassert>

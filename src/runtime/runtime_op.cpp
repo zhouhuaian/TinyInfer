@@ -3,7 +3,7 @@
 
 namespace TinyInfer {
 
-RuntimeOperator::~RuntimeOperator() {
+RuntimeOp::~RuntimeOp() {
   for (auto &param : this->params) {
     if (param.second != nullptr) {
       delete param.second;
@@ -88,7 +88,7 @@ void RuntimeOperatorUtils::InitOpsOutput(
     // 输出操作数为空，说明是第一次构建计算图
     if (!out_oprand) {
       // 初始化输出操作数的名称、维度、值类型
-      srunoprand tmp_out_oprand = std::make_shared<RuntimeOperand>();
+      srunoprand tmp_out_oprand = std::make_shared<RuntimeOprand>();
       tmp_out_oprand->name = pout_oprand->name + "_output";
       tmp_out_oprand->shape = out_shape;
       tmp_out_oprand->type = RuntimeDataType::TypeFloat32;

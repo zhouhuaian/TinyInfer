@@ -1,5 +1,5 @@
-#include "../src/layer/details/convolution.hpp"
-#include "runtime/runtime_ir.hpp"
+#include "../src/kernel/details/convolution.hpp"
+#include "runtime/runtime_graph.hpp"
 #include <benchmark/benchmark.h>
 
 using namespace TinyInfer;

@@ -1,5 +1,5 @@
 #include "data/tensor.hpp"
-#include "runtime/runtime_ir.hpp"
+#include "runtime/runtime_graph.hpp"
 #include <benchmark/benchmark.h>
 
 using namespace TinyInfer;
