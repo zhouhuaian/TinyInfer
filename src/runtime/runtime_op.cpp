@@ -12,7 +12,7 @@ RuntimeOp::~RuntimeOp() {
   }
 }
 
-void RuntimeOperatorUtils::InitOpsInput(const std::vector<srunop> &ops) {
+void RuntimeOpUtils::InitOpsInput(const std::vector<srunop> &ops) {
   CHECK(!ops.empty()) << "Operators for init input shapes is empty!";
 
   for (const auto &op : ops) {
@@ -43,7 +43,7 @@ void RuntimeOperatorUtils::InitOpsInput(const std::vector<srunop> &ops) {
           CHECK(input_data.size() == batch)
               << "Input tensor count not equal to batch!";
         }
-        // 数组为空，说明是第一次构建计算图，则预留输入操作数的capacity为batch
+        // 数组为空，说明是第一次构建计算图，则预留数组的容量等于batch
         else {
           input_data.resize(batch);
         }
@@ -52,7 +52,7 @@ void RuntimeOperatorUtils::InitOpsInput(const std::vector<srunop> &ops) {
   }
 }
 
-void RuntimeOperatorUtils::InitOpsOutput(
+void RuntimeOpUtils::InitOpsOutput(
     const std::vector<pnnx::Operator *> &pnnx_ops,
     const std::vector<srunop> &ops) {
   CHECK(!pnnx_ops.empty() && !ops.empty());
@@ -81,7 +81,7 @@ void RuntimeOperatorUtils::InitOpsOutput(
           out_shape.size() == 4)
         << "Unsupported output oprand shape size: " << out_shape.size();
 
-    // 取出需要初始化的节点输出操作数
+    // 取出需要初始化的输出操作数
     const auto &op = ops.at(i);
     const auto &out_oprand = op->out_oprand;
 
@@ -92,6 +92,7 @@ void RuntimeOperatorUtils::InitOpsOutput(
       tmp_out_oprand->name = pout_oprand->name + "_output";
       tmp_out_oprand->shape = out_shape;
       tmp_out_oprand->type = RuntimeDataType::TypeFloat32;
+      tmp_out_oprand->data.reserve(batch);
 
       // 初始化输出空间——开辟保存每一个输出Tensor的内存空间
       // 注意：初始化输入空间时，不用为输入Tensor开辟空间，因为输入Tensor一定是从前驱节点接收来的！

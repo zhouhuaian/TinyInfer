@@ -53,8 +53,7 @@ InferStatus HardSwish::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus HardSwish::GetInstance(const srunop &op,
-                                            skernel &hardswish) {
+ParseParamAttrStatus HardSwish::Creator(const srunop &op, skernel &hardswish) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -64,7 +63,6 @@ ParseParamAttrStatus HardSwish::GetInstance(const srunop &op,
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper HardSwishGetInstance("nn.Hardswish",
-                                           HardSwish::GetInstance);
+KernelRegisterWrapper HardSwishCreator("nn.Hardswish", HardSwish::Creator);
 
 } // namespace TinyInfer

@@ -71,7 +71,7 @@ InferStatus Sigmoid::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus Sigmoid::GetInstance(const srunop &op, skernel &sigmoid) {
+ParseParamAttrStatus Sigmoid::Creator(const srunop &op, skernel &sigmoid) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -81,6 +81,6 @@ ParseParamAttrStatus Sigmoid::GetInstance(const srunop &op, skernel &sigmoid) {
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper SigmoidGetInstance("nn.Sigmoid", Sigmoid::GetInstance);
+KernelRegisterWrapper SigmoidCreator("nn.Sigmoid", Sigmoid::Creator);
 
 } // namespace TinyInfer

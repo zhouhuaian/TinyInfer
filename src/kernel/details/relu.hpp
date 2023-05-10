@@ -18,11 +18,11 @@ public:
                       std::vector<sftensor> &outputs) override;
 
   /**
-   * 创建ReLU kernel
+   * 解析op，获得kernel的参数和权重，创建ReLU kernel
    * @param op 计算图节点
    * @param relu 创建的ReLU kernel
    */
-  static ParseParamAttrStatus GetInstance(const srunop &op, skernel &relu);
+  static ParseParamAttrStatus Creator(const srunop &op, skernel &relu);
 };
 
 } // namespace TinyInfer

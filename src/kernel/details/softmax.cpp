@@ -114,7 +114,7 @@ InferStatus Softmax::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus Softmax::GetInstance(const srunop &op, skernel &softmax) {
+ParseParamAttrStatus Softmax::Creator(const srunop &op, skernel &softmax) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -138,7 +138,7 @@ ParseParamAttrStatus Softmax::GetInstance(const srunop &op, skernel &softmax) {
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper SoftmaxGetInstanceNN("nn.Softmax", Softmax::GetInstance);
-KernelRegisterWrapper SoftmaxGetInstanceF("F.softmax", Softmax::GetInstance);
+KernelRegisterWrapper SoftmaxCreatorNN("nn.Softmax", Softmax::Creator);
+KernelRegisterWrapper SoftmaxCreatorF("F.softmax", Softmax::Creator);
 
 } // namespace TinyInfer

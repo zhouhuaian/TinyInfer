@@ -12,7 +12,7 @@ public:
   InferStatus Forward(const std::vector<sftensor> &inputs,
                       std::vector<sftensor> &outputs) override;
 
-  static ParseParamAttrStatus GetInstance(const srunop &op, skernel &flatten);
+  static ParseParamAttrStatus Creator(const srunop &op, skernel &flatten);
 
 private:
   int start_dim_; // 执行flatten的开始维度

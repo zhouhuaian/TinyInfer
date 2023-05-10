@@ -82,8 +82,8 @@ InferStatus AdaptAvgPooling::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus AdaptAvgPooling::GetInstance(const srunop &op,
-                                                  skernel &adapt_avgpooling) {
+ParseParamAttrStatus AdaptAvgPooling::Creator(const srunop &op,
+                                              skernel &adapt_avgpooling) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -115,7 +115,7 @@ ParseParamAttrStatus AdaptAvgPooling::GetInstance(const srunop &op,
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper AdaptAvgPoolingGetInstance("nn.AdaptiveAvgPool2d",
-                                                 AdaptAvgPooling::GetInstance);
+KernelRegisterWrapper AdaptAvgPoolingCreator("nn.AdaptiveAvgPool2d",
+                                             AdaptAvgPooling::Creator);
 
 } // namespace TinyInfer

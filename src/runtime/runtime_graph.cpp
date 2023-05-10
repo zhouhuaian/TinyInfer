@@ -116,7 +116,7 @@ void RuntimeGraph::Build(const std::string &input_name,
 
   CHECK(!this->ops_.empty()) << "Graph operators are empty, may be no init";
 
-  // 遍历每个计算节点，保存其后继节点
+  // ! 构建计算图——遍历每个孤立的计算节点，将其与后继节点相连
   for (const auto &cur_op : this->ops_) {
     // 获取当前节点的后继节点（仅有名称）
     auto &out_ops = cur_op->out_ops;
@@ -144,14 +144,15 @@ void RuntimeGraph::Build(const std::string &input_name,
     } else {
       skernel kernel = RuntimeGraph::CreateKernel(op);
       CHECK(kernel != nullptr) << "Kernel create failed!";
+      // 将计算节点op和算子kernel绑定起来
       op->kernel = kernel;
       kernel->set_runtime_op(op);
     }
   }
 
   // 初始化节点的输入、输出空间
-  RuntimeOperatorUtils::InitOpsInput(this->ops_);
-  RuntimeOperatorUtils::InitOpsOutput(graph_->ops, this->ops_);
+  RuntimeOpUtils::InitOpsInput(this->ops_);
+  RuntimeOpUtils::InitOpsOutput(graph_->ops, this->ops_);
 
   graph_state_ = GraphState::Complete;
   input_name_ = input_name;
@@ -216,7 +217,7 @@ std::vector<sftensor> RuntimeGraph::Forward(const std::vector<sftensor> &inputs,
     // 当前节点为空或为输出节点，推理结束
     if (!cur_op || cur_op == output_op) {
       if (debug) {
-        LOG(INFO) << "Inference ended...";
+        LOG(INFO) << "Inference ended";
       }
       break;
     }
@@ -249,7 +250,7 @@ std::vector<sftensor> RuntimeGraph::Forward(const std::vector<sftensor> &inputs,
       }
 
       const auto copy_start = std::chrono::steady_clock::now();
-      // 将当前节点的输出Tensor传递给后继节点
+      // 将当前节点的输出Tensors传递给后继节点
       ProbeNextOp(cur_op, ops_que, cur_op->out_oprand->data);
 
       // 统计不同层间传递Tensor的累计时间
@@ -455,12 +456,13 @@ void RuntimeGraph::ProbeNextOp(const srunop &cur_op,
                                const std::vector<sftensor> &outputs) {
   // 遍历当前节点的后继节点
   const auto &next_ops = cur_op->out_ops;
-  for (const auto &[next_name, next_op] : next_ops) {
+  for (const auto &[_, next_op] : next_ops) {
     // 取出后继节点的输入操作数
     const auto &next_in_oprands = next_op->in_oprands;
     // 检查后继节点的输入操作数是否来自当前节点
     if (next_in_oprands.find(cur_op->name) != next_in_oprands.end()) {
       // 将当前节点的输出Tensor拷贝给后继节点（拷贝指针，两个指针指向同一Tensor对象）
+      // ! 所以节点的输入空间实际上复用了前驱节点的输出空间
       std::vector<sftensor> &next_in_data =
           next_in_oprands.at(cur_op->name)->data;
       for (int b = 0; b < next_in_data.size(); ++b) {

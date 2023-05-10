@@ -13,8 +13,7 @@ public:
   InferStatus Forward(const std::vector<sftensor> &inputs,
                       std::vector<sftensor> &outputs) override;
 
-  static ParseParamAttrStatus GetInstance(const srunop &op,
-                                          skernel &expression);
+  static ParseParamAttrStatus Creator(const srunop &op, skernel &expression);
 
 private:
   std::unique_ptr<ExprParser> parser_; // 表达式解析器

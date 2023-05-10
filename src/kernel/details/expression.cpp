@@ -66,7 +66,7 @@ InferStatus Expression::Forward(const std::vector<sftensor> &inputs,
       // !
       // inputs按顺序保存了所有来源的输入Tensor：[tensor1,tensor2,...,tensor1,tensor2,...]
       // !
-      // 而num表示不同输入来源的下标——即RuntimeOperator的in_oprands_seq中的下标
+      // 而num表示不同输入来源的下标——即RuntimeOp的in_oprands_seq中的下标
       std::vector<sftensor> in_node(batch); // 存放同一来源的输入Tensor
       uint32_t start_idx = token_node->num * batch;
       for (uint32_t b = 0; b < batch; ++b) {
@@ -119,8 +119,8 @@ InferStatus Expression::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus Expression::GetInstance(const srunop &op,
-                                             skernel &expression) {
+ParseParamAttrStatus Expression::Creator(const srunop &op,
+                                         skernel &expression) {
 
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
@@ -146,7 +146,6 @@ ParseParamAttrStatus Expression::GetInstance(const srunop &op,
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper ExpressionGetInstance("pnnx.Expression",
-                                            Expression::GetInstance);
+KernelRegisterWrapper ExpressionCreator("pnnx.Expression", Expression::Creator);
 
 } // namespace TinyInfer

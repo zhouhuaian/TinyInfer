@@ -203,8 +203,8 @@ InferStatus Convolution::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus Convolution::GetInstance(const srunop &op,
-                                              skernel &convolution) {
+ParseParamAttrStatus Convolution::Creator(const srunop &op,
+                                          skernel &convolution) {
   if (!op) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -358,6 +358,6 @@ ParseParamAttrStatus Convolution::GetInstance(const srunop &op,
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper ConvGetInstance("nn.Conv2d", Convolution::GetInstance);
+KernelRegisterWrapper ConvCreator("nn.Conv2d", Convolution::Creator);
 
 } // namespace TinyInfer

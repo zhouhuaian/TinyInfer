@@ -89,7 +89,7 @@ InferStatus Flatten::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus Flatten::GetInstance(const srunop &op, skernel &flatten) {
+ParseParamAttrStatus Flatten::Creator(const srunop &op, skernel &flatten) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -125,6 +125,6 @@ ParseParamAttrStatus Flatten::GetInstance(const srunop &op, skernel &flatten) {
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper FlattenGetInstance("torch.flatten", Flatten::GetInstance);
+KernelRegisterWrapper FlattenCreator("torch.flatten", Flatten::Creator);
 
 } // namespace TinyInfer

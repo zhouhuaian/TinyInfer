@@ -6,9 +6,9 @@
 namespace TinyInfer {
 
 KernelRegister::Registry &KernelRegister::CreateRegistry() {
-  static Registry *KernelRegistry = new Registry();
-  CHECK(KernelRegistry != nullptr) << "Global kernel register created failed!";
-  return *KernelRegistry;
+  static Registry *registry = new Registry;
+  CHECK(registry != nullptr) << "Global kernel registry created failed!";
+  return *registry;
 }
 
 void KernelRegister::RegisterCreator(const std::string &op_type,
@@ -24,7 +24,7 @@ void KernelRegister::RegisterCreator(const std::string &op_type,
 }
 
 skernel KernelRegister::CreateKernel(const srunop &op) {
-  Registry &registry = CreateRegistry();
+  Registry &registry = CreateRegistry(); // 取出注册表
 
   const std::string &op_type = op->type;
   CHECK(registry.find(op_type) != registry.end())

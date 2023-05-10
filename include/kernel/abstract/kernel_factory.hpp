@@ -9,6 +9,7 @@
 
 namespace TinyInfer {
 
+// 算子注册类
 class KernelRegister {
 public:
   // Kernel的创建函数类型
@@ -38,6 +39,7 @@ public:
   static skernel CreateKernel(const srunop &op);
 };
 
+// 算子注册包装类
 class KernelRegisterWrapper {
 public:
   KernelRegisterWrapper(const std::string &op_type,

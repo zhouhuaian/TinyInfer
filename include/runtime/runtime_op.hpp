@@ -1,10 +1,10 @@
-#ifndef TINY_INFER_INCLUDE_PARSER_RUNTIME_OPERATOR_HPP_
-#define TINY_INFER_INCLUDE_PARSER_RUNTIME_OPERATOR_HPP_
+#ifndef TINY_INFER_INCLUDE_PARSER_RUNTIME_OP_HPP_
+#define TINY_INFER_INCLUDE_PARSER_RUNTIME_OP_HPP_
 
 #include "kernel/abstract/kernel.hpp"
 #include "runtime/ir.h"
 #include "runtime_attr.hpp"
-#include "runtime_operand.hpp"
+#include "runtime_oprand.hpp"
 #include "runtime_param.hpp"
 #include <map>
 #include <memory>
@@ -41,7 +41,7 @@ struct RuntimeOp {
 
 using srunop = std::shared_ptr<RuntimeOp>;
 
-class RuntimeOperatorUtils {
+class RuntimeOpUtils {
 public:
   /**
    * 初始化节点的输入空间
@@ -60,4 +60,4 @@ public:
 
 } // namespace TinyInfer
 
-#endif // TINY_INFER_INCLUDE_PARSER_RUNTIME_OPERATOR_HPP_
+#endif // TINY_INFER_INCLUDE_PARSER_RUNTIME_OP_HPP_

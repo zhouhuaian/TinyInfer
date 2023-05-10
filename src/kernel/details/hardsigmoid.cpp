@@ -54,8 +54,8 @@ InferStatus HardSigmoid::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus HardSigmoid::GetInstance(const srunop &op,
-                                              skernel &hardsigmoid) {
+ParseParamAttrStatus HardSigmoid::Creator(const srunop &op,
+                                          skernel &hardsigmoid) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -65,7 +65,7 @@ ParseParamAttrStatus HardSigmoid::GetInstance(const srunop &op,
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper HardSigmoidGetInstance("nn.Hardsigmoid",
-                                             HardSigmoid::GetInstance);
+KernelRegisterWrapper HardSigmoidCreator("nn.Hardsigmoid",
+                                         HardSigmoid::Creator);
 
 } // namespace TinyInfer

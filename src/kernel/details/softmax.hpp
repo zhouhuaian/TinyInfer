@@ -12,7 +12,7 @@ public:
   InferStatus Forward(const std::vector<sftensor> &inputs,
                       std::vector<sftensor> &outputs) override;
 
-  static ParseParamAttrStatus GetInstance(const srunop &op, skernel &softmax);
+  static ParseParamAttrStatus Creator(const srunop &op, skernel &softmax);
 
 private:
   int dim_; // 执行softmax操作的维度，-1表示倒数第一个维度

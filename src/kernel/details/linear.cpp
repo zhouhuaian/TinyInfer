@@ -97,7 +97,7 @@ InferStatus Linear::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus Linear::GetInstance(const srunop &op, skernel &linear) {
+ParseParamAttrStatus Linear::Creator(const srunop &op, skernel &linear) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -165,6 +165,6 @@ ParseParamAttrStatus Linear::GetInstance(const srunop &op, skernel &linear) {
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper LinearGetInstance("nn.Linear", Linear::GetInstance);
+KernelRegisterWrapper LinearCreator("nn.Linear", Linear::Creator);
 
 } // namespace TinyInfer

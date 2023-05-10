@@ -66,7 +66,7 @@ InferStatus Concat::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus Concat::GetInstance(const srunop &op, skernel &concat) {
+ParseParamAttrStatus Concat::Creator(const srunop &op, skernel &concat) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is nullptr";
     return ParseParamAttrStatus::OpEmpty;
@@ -90,6 +90,6 @@ ParseParamAttrStatus Concat::GetInstance(const srunop &op, skernel &concat) {
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper ConcatGetInstance("torch.cat", Concat::GetInstance);
+KernelRegisterWrapper ConcatCreator("torch.cat", Concat::Creator);
 
 } // namespace TinyInfer

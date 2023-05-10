@@ -95,8 +95,8 @@ InferStatus MaxPooling::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus MaxPooling::GetInstance(const srunop &op,
-                                             skernel &maxpooling) {
+ParseParamAttrStatus MaxPooling::Creator(const srunop &op,
+                                         skernel &maxpooling) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -167,7 +167,6 @@ ParseParamAttrStatus MaxPooling::GetInstance(const srunop &op,
   return ParseParamAttrStatus::ParamAttrParseSuccess;
 }
 
-KernelRegisterWrapper MaxPoolingGetInstance("nn.MaxPool2d",
-                                            MaxPooling::GetInstance);
+KernelRegisterWrapper MaxPoolingCreator("nn.MaxPool2d", MaxPooling::Creator);
 
 } // namespace TinyInfer

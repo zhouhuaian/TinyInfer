@@ -23,7 +23,7 @@ TEST(test_runtime, runtime_graph_input_init1) {
   }
 
   ASSERT_EQ(ops.size(), op_size);
-  RuntimeOperatorUtils::InitOpsInput(ops);
+  RuntimeOpUtils::InitOpsInput(ops);
   for (uint32_t i = 0; i < ops.size(); ++i) {
     const auto &op = ops.at(i);
     ASSERT_EQ(op->in_oprands["batch1"]->data.empty(), false);
@@ -33,7 +33,7 @@ TEST(test_runtime, runtime_graph_input_init1) {
     ASSERT_EQ(batch1, batch2);
   }
 
-  RuntimeOperatorUtils::InitOpsInput(ops);
+  RuntimeOpUtils::InitOpsInput(ops);
   for (uint32_t i = 0; i < ops.size(); ++i) {
     const auto &op = ops.at(i);
     ASSERT_EQ(op->in_oprands["batch1"]->data.empty(), false);
@@ -64,7 +64,7 @@ TEST(test_runtime, runtime_graph_input_init2) {
   }
 
   ASSERT_EQ(ops.size(), op_size);
-  RuntimeOperatorUtils::InitOpsInput(ops);
+  RuntimeOpUtils::InitOpsInput(ops);
   for (uint32_t i = 0; i < ops.size(); ++i) {
     const auto &op = ops.at(i);
     ASSERT_EQ(op->in_oprands["batch1"]->data.empty(), false);
@@ -74,7 +74,7 @@ TEST(test_runtime, runtime_graph_input_init2) {
     ASSERT_EQ(batch1, batch2);
   }
 
-  RuntimeOperatorUtils::InitOpsInput(ops);
+  RuntimeOpUtils::InitOpsInput(ops);
   for (uint32_t i = 0; i < ops.size(); ++i) {
     const auto &op = ops.at(i);
     ASSERT_EQ(op->in_oprands["batch1"]->data.empty(), false);
@@ -105,7 +105,7 @@ TEST(test_runtime, runtime_graph_input_init3) {
   }
 
   ASSERT_EQ(ops.size(), op_size);
-  RuntimeOperatorUtils::InitOpsInput(ops);
+  RuntimeOpUtils::InitOpsInput(ops);
   for (uint32_t i = 0; i < ops.size(); ++i) {
     const auto &op = ops.at(i);
     ASSERT_EQ(op->in_oprands["batch1"]->data.empty(), false);
@@ -115,7 +115,7 @@ TEST(test_runtime, runtime_graph_input_init3) {
     ASSERT_EQ(batch1, batch2);
   }
 
-  RuntimeOperatorUtils::InitOpsInput(ops);
+  RuntimeOpUtils::InitOpsInput(ops);
   for (uint32_t i = 0; i < ops.size(); ++i) {
     const auto &op = ops.at(i);
     ASSERT_EQ(op->in_oprands["batch1"]->data.empty(), false);
@@ -138,7 +138,7 @@ TEST(test_runtime, runtime_graph_output_init1) {
     ops.push_back(std::make_shared<RuntimeOp>());
   }
 
-  RuntimeOperatorUtils::InitOpsOutput(pnnx_ops, ops);
+  RuntimeOpUtils::InitOpsOutput(pnnx_ops, ops);
 
   for (const auto &op : ops) {
     const auto &out_oprand = op->out_oprand;
@@ -152,7 +152,7 @@ TEST(test_runtime, runtime_graph_output_init1) {
     }
   }
 
-  RuntimeOperatorUtils::InitOpsOutput(
+  RuntimeOpUtils::InitOpsOutput(
       pnnx_ops, ops); // 注意：这其中会恢复输出Tensor的维度
 
   for (const auto &op : ops) {
@@ -179,7 +179,7 @@ TEST(test_runtime, runtime_graph_output_init2) {
     ops.push_back(std::make_shared<RuntimeOp>());
   }
 
-  RuntimeOperatorUtils::InitOpsOutput(pnnx_ops, ops);
+  RuntimeOpUtils::InitOpsOutput(pnnx_ops, ops);
 
   for (const auto &op : ops) {
     const auto &out_oprand = op->out_oprand;
@@ -194,7 +194,7 @@ TEST(test_runtime, runtime_graph_output_init2) {
     }
   }
 
-  RuntimeOperatorUtils::InitOpsOutput(pnnx_ops, ops);
+  RuntimeOpUtils::InitOpsOutput(pnnx_ops, ops);
 
   for (const auto &op : ops) {
     const auto &out_oprand = op->out_oprand;
@@ -221,7 +221,7 @@ TEST(test_runtime, runtime_graph_output_init3) {
     ops.push_back(std::make_shared<RuntimeOp>());
   }
 
-  RuntimeOperatorUtils::InitOpsOutput(pnnx_ops, ops);
+  RuntimeOpUtils::InitOpsOutput(pnnx_ops, ops);
 
   for (const auto &op : ops) {
     const auto &out_oprand = op->out_oprand;
@@ -235,7 +235,7 @@ TEST(test_runtime, runtime_graph_output_init3) {
     }
   }
 
-  RuntimeOperatorUtils::InitOpsOutput(pnnx_ops, ops);
+  RuntimeOpUtils::InitOpsOutput(pnnx_ops, ops);
 
   for (const auto &op : ops) {
     const auto &out_oprand = op->out_oprand;
@@ -261,7 +261,7 @@ TEST(test_runtime, runtime_graph_output_init4) {
     ops.push_back(std::make_shared<RuntimeOp>());
   }
 
-  RuntimeOperatorUtils::InitOpsOutput(pnnx_ops, ops);
+  RuntimeOpUtils::InitOpsOutput(pnnx_ops, ops);
 
   for (const auto &op : ops) {
     const auto &out_oprand = op->out_oprand;
@@ -275,7 +275,7 @@ TEST(test_runtime, runtime_graph_output_init4) {
     }
   }
 
-  RuntimeOperatorUtils::InitOpsOutput(pnnx_ops, ops);
+  RuntimeOpUtils::InitOpsOutput(pnnx_ops, ops);
 
   for (const auto &op : ops) {
     const auto &out_oprand = op->out_oprand;

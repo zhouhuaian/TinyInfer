@@ -12,7 +12,7 @@ public:
   InferStatus Forward(const std::vector<sftensor> &inputs,
                       std::vector<sftensor> &outputs) override;
 
-  static ParseParamAttrStatus GetInstance(const srunop &op, skernel &concat);
+  static ParseParamAttrStatus Creator(const srunop &op, skernel &concat);
 
 private:
   int32_t dim_; // 拼接维度

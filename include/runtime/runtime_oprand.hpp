@@ -1,5 +1,5 @@
-#ifndef TINY_INFER_INCLUDE_PARSER_RUNTIME_OPERAND_HPP_
-#define TINY_INFER_INCLUDE_PARSER_RUNTIME_OPERAND_HPP_
+#ifndef TINY_INFER_INCLUDE_PARSER_RUNTIME_OPRAND_HPP_
+#define TINY_INFER_INCLUDE_PARSER_RUNTIME_OPRAND_HPP_
 
 #include "data/tensor.hpp"
 #include "runtime_datatype.hpp"
@@ -23,4 +23,4 @@ using srunoprand = std::shared_ptr<RuntimeOprand>;
 
 } // namespace TinyInfer
 
-#endif // TINY_INFER_INCLUDE_PARSER_RUNTIME_OPERAND_HPP_
+#endif // TINY_INFER_INCLUDE_PARSER_RUNTIME_OPRAND_HPP_

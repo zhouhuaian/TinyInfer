@@ -12,8 +12,8 @@ public:
   InferStatus Forward(const std::vector<sftensor> &inputs,
                       std::vector<sftensor> &outputs) override;
 
-  static ParseParamAttrStatus GetInstance(const srunop &op,
-                                          skernel &adapt_avgpooling);
+  static ParseParamAttrStatus Creator(const srunop &op,
+                                      skernel &adapt_avgpooling);
 
 private:
   uint32_t output_h_; // 输出Tensor高度

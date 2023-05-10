@@ -12,8 +12,7 @@ public:
   InferStatus Forward(const std::vector<sftensor> &inputs,
                       std::vector<sftensor> &outputs) override;
 
-  static ParseParamAttrStatus GetInstance(const srunop &op,
-                                          skernel &hardsigmoid);
+  static ParseParamAttrStatus Creator(const srunop &op, skernel &hardsigmoid);
 };
 
 } // namespace TinyInfer

@@ -14,8 +14,7 @@ public:
   InferStatus Forward(const std::vector<sftensor> &inputs,
                       std::vector<sftensor> &outputs) override;
 
-  static ParseParamAttrStatus GetInstance(const srunop &op,
-                                          skernel &maxpooling);
+  static ParseParamAttrStatus Creator(const srunop &op, skernel &maxpooling);
 
 private:
   uint32_t padding_h_; // 高度填充值

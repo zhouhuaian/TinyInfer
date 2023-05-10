@@ -73,7 +73,7 @@ InferStatus ReLU::Forward(const std::vector<sftensor> &inputs,
   return InferStatus::InferSuccess;
 }
 
-ParseParamAttrStatus ReLU::GetInstance(const srunop &op, skernel &relu) {
+ParseParamAttrStatus ReLU::Creator(const srunop &op, skernel &relu) {
   if (op == nullptr) {
     LOG(ERROR) << "Operator is empty";
     return ParseParamAttrStatus::OpEmpty;
@@ -84,7 +84,7 @@ ParseParamAttrStatus ReLU::GetInstance(const srunop &op, skernel &relu) {
 }
 
 // 调用KernelRegisterWrapper的构造函数，注册ReLU
-// kernel的创建函数GetInstance到注册表中
-KernelRegisterWrapper ReluGetInstance("nn.ReLU", ReLU::GetInstance);
+// kernel的创建函数Creator到注册表中
+KernelRegisterWrapper ReluCreator("nn.ReLU", ReLU::Creator);
 
 } // namespace TinyInfer

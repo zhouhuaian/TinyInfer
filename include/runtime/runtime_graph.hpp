@@ -3,7 +3,7 @@
 
 #include "ir.h"
 #include "kernel/abstract/kernel.hpp"
-#include "runtime/runtime_operand.hpp"
+#include "runtime/runtime_oprand.hpp"
 #include "runtime_op.hpp"
 #include <glog/logging.h>
 #include <map>
@@ -114,10 +114,10 @@ private:
   static bool CheckOpReady(const srunop &op);
 
   /**
-   * 向后继节点传递操作数，并将就绪的节点加入执行队列
+   * 向后继节点传递Tensors，并将就绪的节点加入执行队列
    * @param cur_op 当前节点
    * @param ops_que 计算图节点的执行队列
-   * @param outputs 当前节点的输出Tensor，会被传递给后继节点
+   * @param outputs 当前节点的输出Tensors，会被传递给后继节点
    */
   static void ProbeNextOp(const srunop &cur_op, std::deque<srunop> &ops_que,
                           const std::vector<sftensor> &outputs);
@@ -136,10 +136,11 @@ private:
   std::string input_name_;  // 输入节点名称
   std::string output_name_; // 输出节点名称
 
-  std::unique_ptr<pnnx::Graph> graph_;                // pnnx格式的计算图
   std::vector<srunop> ops_;                           // 计算图节点
   std::unordered_map<std::string, srunop> input_ops;  // 输入节点
   std::unordered_map<std::string, srunop> output_ops; // 输出节点
+
+  std::unique_ptr<pnnx::Graph> graph_; // pnnx格式的计算图
 };
 
 } // namespace TinyInfer
